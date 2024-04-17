@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from utils.utils import*
 """
 Structure of node_info:
 {
@@ -289,22 +289,6 @@ def find_transaction_by_id(session, transaction_id):
         return transaction_info
     else:
         raise ValueError("No se encontró la transacción con el ID proporcionado.")
-
-
-def input_int(message):
-    while True:
-        try:
-            return int(input(message))
-        except ValueError:
-            print("Por favor, ingrese un número entero válido.")
-
-
-def input_float(message):
-    while True:
-        try:
-            return float(input(message))
-        except ValueError:
-            print("Por favor, ingrese un número válido.")
 
 
 def handle_transaction(session, transaction_type='TRANSFERENCIA'):

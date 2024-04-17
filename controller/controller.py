@@ -1,5 +1,6 @@
 from view.menus import *
 from controller.db_crud import *
+from utils.utils import *
 
 global_dpi = ""
 
@@ -34,12 +35,11 @@ def run(session):
 
         # Cliente
         elif opcion_principal == "2":
-            global_dpi = input("Ingrese su DPI: ")
-
+            global_dpi = input("Por favor, ingrese su DPI: ")
             opcion_cliente = modo_cliente()
 
             if opcion_cliente == "1":
-                informacion_nodo = crear_usuario_individuo(global_dpi)
+                informacion_nodo = crear_usuario_individuo()
                 print(create_node(session, informacion_nodo))
 
             elif opcion_cliente == "2":

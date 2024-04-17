@@ -1,3 +1,5 @@
+from utils.utils import *
+
 def success_message(message):
     """Muestra un mensaje de éxito junto con un mensaje adicional.
 
@@ -114,23 +116,29 @@ def modo_cliente():
     return opcion
 
 #1
-def crear_usuario_individuo(global_dpi):
-    dpi = global_dpi
+def crear_usuario_individuo():
     nombre = input("Ingrese el nombre del nuevo usuario: ")
-    edad = input("Ingrese la edad del nuevo usuario: ")
-    direccion = input("Ingrese la dirección del nuevo usuario: ")
+    edad = input_int("Ingrese la edad del nuevo usuario: ")
+    dpi = input_int("Ingrese el DPI del nuevo usuario: ")
+    nit = input("Ingrese el NIT del nuevo usuario: (puede dejarlo en blanco)")
+    direccion = input("Ingrese la dirección del nuevo usuario: (puede dejarlo en blanco)")
+    telefono = input("Ingrese el número de teléfono del nuevo usuario: (puede dejarlo en blanco)")
+    email = input("Ingrese el correo electrónico del nuevo usuario: (puede dejarlo en blanco)")
     
-    node_info = {
-        'labels': ["Individuo"],
-        'properties': {
-        "dpi": dpi,
-        "nombre": nombre,
-        "edad": edad,
-        "direccion": direccion
-        },
-        'key_property': "dpi",
-        'key_value': dpi
-    }
+    node_info = gen_node_struct(["Individuo"], 
+                    {"nombre": nombre, 
+                     "dpi": dpi, }, 
+                     "dpi", dpi)
+    if edad:
+        node_info["properties"]["edad"] = edad
+    if nit:
+        node_info["properties"]["nit"] = nit
+    if direccion:
+        node_info["properties"]["direccion"] = direccion
+    if telefono:
+        node_info["properties"]["telefono"] = telefono
+    if email:
+        node_info["properties"]["email"] = email
 
     return node_info
 
