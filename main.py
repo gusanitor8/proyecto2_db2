@@ -17,8 +17,9 @@ try:
             transaction_history(session, cuenta['properties']['no_cuenta'])
             print('Transacciones entrantes:')
             incoming_transaction_history(session, cuenta['properties']['no_cuenta'])
-            
-        
+        trans_id = int(input('Ingrese el codigo de la transaccion a consultar: '))
+        transaccion = find_transaction_by_id(session, trans_id)
+        print(transaccion)
 
 except Exception as e:
     print(f"ERROR: {e}")

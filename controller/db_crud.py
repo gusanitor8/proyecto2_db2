@@ -214,3 +214,27 @@ def incoming_transaction_history(session, account_number):
             break
         skip += limit
 
+
+def find_transaction_by_id(session, transaction_id):
+    query = """
+    MATCH ()-[r:TRANSACCION]->() WHERE id(r) = $transaction_id
+    RETURN r, id(r) AS id, startNode(r).no_cuenta AS cuenta_origen, endNode(r).no_cuenta AS cuenta_destino
+    """
+    result = session.run(query, transaction_id=transaction_id)
+    record = result.single()
+
+    if record:
+        transaction_info = {
+            'id': record['id'],
+            'cuenta_origen': record['cuenta_origen'],
+            'cuenta_destino': record['cuenta_destino'],
+            'properties': dict(record['r'])
+        }
+        print(f"Transaccion desde la cuenta {record['cuenta_origen']} a la cuenta {record['cuenta_destino']}:")
+        print_transaction_info(record['r'])
+        
+        return transaction_info
+    else:
+        print("No se encontró la transacción con el ID proporcionado.")
+        return None
+
