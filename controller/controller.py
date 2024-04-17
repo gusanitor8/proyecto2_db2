@@ -77,14 +77,13 @@ def run(session):
                 hacer_transferencia(session)
 
             elif opcion_cliente == "6":
-                eliminar_propiedades(global_dpi)
+                eliminar_propiedades(session)
 
             elif opcion_cliente == "7":
-                actualizar_celular_correo(global_dpi)
+                actualizar_celular_correo(session)
 
             elif opcion_cliente == "8":
-                update_info = actualizar_titulacion(global_dpi)
-                print(update_relationship (session, update_info))
+               actualizar_titulacion(session)
 
             elif opcion_cliente == "9":
                 label, key_property, key_value = eliminar_usuario(global_dpi)
