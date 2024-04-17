@@ -15,7 +15,7 @@ def success_message(message):
 def menu_administrador():
     global global_dpi
 
-    print("\nSe ha ingresado como Usuario Administrador. ¿Qué deseas realizar?")
+    print("\nSe ha ingresado como Usuario Administrador. \n¿Qué deseas realizar?")
     print("1. Desactivar cuenta de usuario o empresa")
     print("2. Clasificar cuentas de un usuario como fraudulentas")
     print("3. Editar la propiedad de fraude de una cuenta de usuario")
@@ -182,7 +182,6 @@ def menu_principal():
     opcion = input("Ingrese el número de la opción que deseas: ")
 
     if opcion == "1":
-        global_dpi = input("Ingrese su DPI: ")
         menu_administrador()
     elif opcion == "2":
         global_dpi = input("Ingrese su DPI: ")
