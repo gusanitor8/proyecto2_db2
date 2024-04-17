@@ -21,3 +21,12 @@ def gen_node_struct(labels, properties, key, value):
         "key_value":value
     }
     return node_info
+
+
+def inpt_null(message):
+    while True:
+        value = input(message)
+        if value == "":
+            print("Por favor, ingrese un valor válido.")
+        else:
+            return value
