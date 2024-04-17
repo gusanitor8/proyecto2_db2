@@ -19,7 +19,10 @@ try:
             incoming_transaction_history(session, cuenta['properties']['no_cuenta'])
         trans_id = int(input('Ingrese el codigo de la transaccion a consultar: '))
         transaccion = find_transaction_by_id(session, trans_id)
-        print(transaccion)
+
+        tipo_trans = 'Pago'
+        handle_transaction(session, tipo_trans)
+        
 
 except Exception as e:
     print(f"ERROR: {e}")

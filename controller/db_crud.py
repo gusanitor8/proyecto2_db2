@@ -1,3 +1,5 @@
+from datetime import datetime
+
 """
 Structure of node_info:
 {
@@ -232,9 +234,50 @@ def find_transaction_by_id(session, transaction_id):
         }
         print(f"Transaccion desde la cuenta {record['cuenta_origen']} a la cuenta {record['cuenta_destino']}:")
         print_transaction_info(record['r'])
-        
+
         return transaction_info
     else:
-        print("No se encontró la transacción con el ID proporcionado.")
-        return None
+        raise ValueError("No se encontró la transacción con el ID proporcionado.")
 
+
+def handle_transaction(session, transaction_type='TRANSFERENCIA'):
+    # Solicitar información de la transacción
+    from_account = int(input("Ingrese el número de la cuenta origen: "))
+    from_account_info = get_node_info(session, 'Cuenta', 'no_cuenta', from_account)
+    to_account = int(input("Ingrese el número de la cuenta destino: "))
+    to_account_info = get_node_info(session, 'Cuenta', 'no_cuenta', to_account)
+    amount = float(input("Ingrese el monto de la transacción: "))
+    description = input("Ingrese una descripción para la transacción (puede dejarlo en blanco): ")
+    ubicacion = input("Ingrese la ubicación de la transacción (puede dejarlo en blanco): ")
+
+    # Verificar condiciones de saldo y límite de retiro
+    if amount > from_account_info['properties']['saldo'] or amount > from_account_info['properties']['limite_retiro']:
+        raise ValueError("La transacción excede el límite de retiro o el saldo disponible.")
+
+    # Preparar las propiedades de la transacción, excluyendo las vacías
+    transaction_properties = {
+        'monto': amount,
+        'fecha': datetime.now(),
+        'tipo': transaction_type,
+        'alerta': False
+    }
+
+    if description:  # Solo añadir descripción si no está vacía
+        transaction_properties['descripcion'] = description
+    if ubicacion:
+        transaction_properties['ubicacion'] = ubicacion
+    
+
+    # Crear la relación de transacción
+    create_relationship(session, from_account_info, to_account_info, 'TRANSACCION', transaction_properties)
+
+    # Actualizar saldos
+    update_account_balance(session, from_account, -amount)
+    update_account_balance(session, to_account, amount)
+    print("Transacción realizada con éxito.")
+
+
+def update_account_balance(session, account_number, amount_change):
+    query = f"MATCH (c:Cuenta {{no_cuenta: $account_number}}) SET c.saldo = c.saldo + $amount_change RETURN c.saldo"
+    result = session.run(query, account_number=account_number, amount_change=amount_change)
+    return result.single()[0]
