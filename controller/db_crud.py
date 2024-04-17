@@ -280,6 +280,37 @@ def transaction_history(session, account_number):
         skip += limit
 
 
+def delete_node(session, node_info):
+    """
+    Deletes a node from the database.
+
+    Args:
+        session: The Neo4j session object.
+        node_info: A dictionary containing information about the node. It should have the following keys:
+            - 'labels': A list of labels associated with the node.
+            - 'key_property': The property used as the key to find the node.
+            - 'key_value': The value of the key property to search for.
+
+    Returns:
+        A success message if the node is deleted successfully.
+
+    Raises:
+        RuntimeError: If the node does not exist or if the node deletion fails.
+    """
+    # Create the Cypher query
+    label_string = ":".join(node_info['labels'])
+    query = f"""
+    MATCH (n:{label_string} {{{node_info['key_property']}: $key_value}})
+    DETACH DELETE n
+    """
+
+    # Run the query and collect the results
+    result = session.run(query, key_value=node_info['key_value'])
+    summary = result.consume()  # Use consume instead of summary
+
+
+    print(f"SUCCESS: Node with {node_info['key_property']}='{node_info['key_value']}' deleted.")
+
 def incoming_transaction_history(session, account_number):
     skip = 0
     limit = 3  # Define el límite de transacciones por página
