@@ -1,8 +1,9 @@
 from view.menus import *
+from controller.db_crud import *
 
 global_dpi = ""
 
-def run():
+def run(session):
     while True:
         opcion_principal = menu_principal()
 
@@ -38,7 +39,8 @@ def run():
             opcion_cliente = modo_cliente()
 
             if opcion_cliente == "1":
-                crear_usuario_individuo(global_dpi)
+                informacion_nodo = crear_usuario_individuo(global_dpi)
+                print(create_node(session, informacion_nodo))
 
             elif opcion_cliente == "2":
                 crear_usuario_empresa()

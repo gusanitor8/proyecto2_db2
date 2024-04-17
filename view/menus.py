@@ -119,8 +119,21 @@ def crear_usuario_individuo(global_dpi):
     nombre = input("Ingrese el nombre del nuevo usuario: ")
     edad = input("Ingrese la edad del nuevo usuario: ")
     direccion = input("Ingrese la dirección del nuevo usuario: ")
-    success_message("El usuario individuo ha sido creado exitosamente.")
-    menu_principal()  # Regresar al menú principal
+    
+    node_info = {
+        'labels': ["Individuo"],
+        'properties': {
+        "dpi": dpi,
+        "nombre": nombre,
+        "edad": edad,
+        "direccion": direccion
+        },
+        'key_property': "dpi",
+        'key_value': dpi
+    }
+
+    return node_info
+
 
 #2
 def crear_usuario_empresa():
