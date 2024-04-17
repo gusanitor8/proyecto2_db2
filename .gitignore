@@ -161,3 +161,9 @@ cython_debug/
 
 # Sublime Text
 *.html
+utils/populate_db.ipynb
+*.ipynb
+utils/populate_db.ipynb
+utils/relations.csv
+utils/relations.csv
+utils/relations.csv

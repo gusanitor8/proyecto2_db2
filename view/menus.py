@@ -288,12 +288,38 @@ def actualizar_celular_correo(global_dpi):
         success_message("La dirección de correo electrónico ha sido actualizada exitosamente.")
         menu_principal()  # Regresar al menú principal
 
-#8
+#8 PENDIENTE
 def actualizar_titulacion(global_dpi):
-    dpi = global_dpi
-    print("Ingrese la nueva titulación para este usuario.")
-    success_message("La titulación ha sido actualizada exitosamente.")
-    menu_principal()  # Regresar al menú principal
+    dpi = input("Ingrese el DPI del usuario al que quiere cambiar la titulacion: ")
+    nit = input("Ingrese el NIT de la empresa a la que quiere agregar la titularidad: ")
+
+    node_info1 = {
+        'labels': ["Individuo"],
+        'properties': {
+        "dpi": dpi
+        },
+        'key_property': "dpi",
+        'key_value': dpi
+    }
+
+    node_info2 = {
+        'labels': ["Empresa"],
+        'properties': {
+        "nit": nit
+        },
+        'key_property': "nit",
+        'key_value': nit
+    }
+
+    relationship_type = 'TITULAR'
+
+    property_value = input("Ingrese el nuevo valor para la propiedad de la relación (true or false): ")
+
+    new_properties = {
+        'estado': property_value
+    }
+
+    return node_info1, node_info2, relationship_type, new_properties
 
 #9
 def eliminar_usuario(global_dpi):
@@ -309,9 +335,14 @@ def eliminar_usuario(global_dpi):
 
 #10
 def informacion_usuario(global_dpi):
-    dpi = global_dpi
-    print("Esta es la información de su usuario.")
-    menu_principal()  # Regresar al menú principal
+    dpi = input_int("Ingrese el DPI del usuario del que desea obtener información: ")
+
+    label = 'Individuo'
+    key_property = 'dpi'
+    key_value = dpi
+    
+    return label, key_property, key_value
+    
 
 #11
 def ver_cuentas(global_dpi):
