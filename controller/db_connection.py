@@ -5,7 +5,7 @@ from neo4j import GraphDatabase
 # Global variable for Neo4j driver
 neo4j_driver = None
 
-def load_credentials(filepath='.env'):
+def load_credentials(filepath):
     """
     Load the credentials from a .env file.
 
@@ -31,7 +31,7 @@ def load_credentials(filepath='.env'):
     return URI, AUTH
 
 
-def init_driver():
+def init_driver(path):
     """
     Initializes and returns a Neo4j driver instance.
 
@@ -47,7 +47,7 @@ def init_driver():
     """
     global neo4j_driver
     if neo4j_driver is None:
-        URI, AUTH = load_credentials()
+        URI, AUTH = load_credentials(path)
         try:
             neo4j_driver = GraphDatabase.driver(URI, auth=AUTH)
             neo4j_driver.verify_connectivity()
@@ -58,7 +58,7 @@ def init_driver():
     return neo4j_driver
 
 
-def get_driver():
+def get_driver(path='.env'):
     """
     Retrieves the Neo4j driver instance.
 
@@ -68,7 +68,7 @@ def get_driver():
         The Neo4j driver instance.
     """
     if neo4j_driver is None:
-        return init_driver()
+        return init_driver(path)
     return neo4j_driver
 
 
