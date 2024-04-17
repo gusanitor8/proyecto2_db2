@@ -9,6 +9,10 @@ try:
         user = get_node_info(session, 'Individuo', 'dpi', 5)
         print('INFO: Node information retrieved successfully')
         print_node_info(user)
+        cuentas = find_associated_accounts(session, 'Individuo', 'dpi', 5)
+        print('INFO: Associated accounts retrieved successfully')
+        for cuenta in cuentas:
+            print_node_info(cuenta)
         
 
 except Exception as e:

@@ -126,3 +126,22 @@ def print_node_info(node_info):
             value = value.replace('\n', ', ')
         print(f"- {key}: {value}")
     print()
+
+
+def find_associated_accounts(session, node_label, key_property, key_value):
+    query = f"""
+    MATCH (n:{node_label})-[r:TITULAR]->(c:Cuenta)
+    WHERE n.{key_property} = $key_value
+    RETURN labels(c) AS labels, properties(c) AS properties
+    """
+    results = session.run(query, key_value=key_value)
+    accounts = []
+    
+    for record in results:
+        account_info = {
+            'labels': record['labels'],
+            'properties': record['properties']
+        }
+        accounts.append(account_info)
+
+    return accounts
