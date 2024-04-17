@@ -236,8 +236,8 @@ def actualizar_celular_correo(global_dpi):
 
 #8 PENDIENTE
 def actualizar_titulacion(global_dpi):
-    dpi = input("Ingrese el DPI del usuario al que quiere cambiar la titulacion: ")
-    nit = input("Ingrese el NIT de la empresa a la que quiere agregar la titularidad: ")
+    dpi = input_int("Ingrese el DPI del usuario al que quiere cambiar la titulacion: ")
+    nit = input_int("Ingrese el NIT de la empresa a la que quiere agregar la titularidad: ")
 
     node_info1 = {
         'labels': ["Individuo"],
@@ -297,7 +297,13 @@ def informacion_usuario(global_dpi):
 def ver_cuentas(global_dpi):
     dpi = global_dpi
     print("Estas son sus cuentas.")
-    menu_principal()  # Regresar al menú principal
+
+    node_label = 'Individuo'
+    key_property = 'dpi'
+    key_value = dpi
+
+    return node_label, key_property, key_value
+
 
 
 # 12

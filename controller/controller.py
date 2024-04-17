@@ -6,7 +6,7 @@ from controller.db_crud import *
 global_dpi = ""
 
 
-def run():
+def run(session):
     while True:
         opcion_principal = menu_principal()
 
@@ -50,7 +50,7 @@ def run():
 
         # Cliente
         elif opcion_principal == "2":
-            global_dpi = input("Ingrese su DPI: ")
+            global_dpi = input_int("Ingrese su DPI: ")
 
             opcion_cliente = modo_cliente()
 
@@ -90,7 +90,8 @@ def run():
                 
 
             elif opcion_cliente == "11":
-                ver_cuentas(global_dpi)
+                node_label, key_property, key_value = ver_cuentas(global_dpi)
+                print(find_associated_accounts(session, node_label, key_property, key_value))
 
             elif opcion_cliente == "12":
                 informacion_cuenta(global_dpi)
