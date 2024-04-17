@@ -24,7 +24,7 @@ def display_trans_history(session, node_info):
         # add nodes
         net.add_node(node_a.element_id, label='Cuenta: ' + str(node_a._properties['no_cuenta']))
         net.add_node(node_b.element_id, label='Cuenta: ' + str(node_b._properties['no_cuenta']))
-        net.add_edge(node_a.element_id, node_b.element_id, title=relationship.type, label=relationship.type)
+        net.add_edge(node_a.element_id, node_b.element_id, title=relationship.type, label='QTQ ' + str(relationship._properties['monto']))
 
     net.show("out.html", notebook=False)
     current_path = os.getcwd()
