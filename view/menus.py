@@ -305,7 +305,7 @@ def actualizar_celular_correo(global_dpi):
 #8 PENDIENTE
 def actualizar_titulacion(global_dpi):
     dpi = input_int("Ingrese el DPI del usuario al que quiere cambiar la titulacion: ")
-    nit = input_int("Ingrese el NIT de la empresa a la que quiere agregar la titularidad: ")
+    nit = input_null("Ingrese el NIT de la empresa a la que quiere agregar la titularidad: ")
 
     node_info1 = {
         'labels': ["Individuo"],
@@ -342,11 +342,14 @@ def eliminar_usuario(global_dpi):
     confirmacion = input("1. Si, 2. No: ")
     if confirmacion == "1":
         dpi = global_dpi
-        success_message("El usuario ha sido eliminado exitosamente.")
-        menu_principal()  # Regresar al menú principal
+        label = 'Individuo'
+        key_property = 'dpi'
+        key_value = dpi
+
+        return label, key_property, key_value
+    
     elif confirmacion == "2":
         print("No se ha eliminado el usuario.")
-        menu_principal()  # Regresar al menú anterior
 
 
 # 10
@@ -360,7 +363,7 @@ def informacion_usuario(global_dpi):
     key_value = dpi
     
     return label, key_property, key_value
-    
+
 
 
 # 11
@@ -376,7 +379,7 @@ def informacion_usuario(global_dpi):
 #11
 def ver_cuentas(global_dpi):
     dpi = global_dpi
-    print("Estas son sus cuentas.")
+    print("\nEstas son sus cuentas:")
 
     node_label = 'Individuo'
     key_property = 'dpi'
@@ -384,12 +387,11 @@ def ver_cuentas(global_dpi):
 
     return node_label, key_property, key_value
 
-
-
 # 12
 def informacion_cuenta(global_dpi):
-    dpi = global_dpi
-    print("Estas son sus cuentas.")
-    cuenta = input("Ingrese el No. de Cuenta de la que desea obtener informacion: ")
-    print("Esta es la información de la cuenta.")
-    menu_principal()  # Regresar al menú principal
+    no_cuenta = input_int("\nIngrese el No. de Cuenta de la que desea obtener información: ")
+    label = 'Cuenta'
+    key_property = 'no_cuenta'
+    key_value = no_cuenta
+
+    return label, key_property, key_value

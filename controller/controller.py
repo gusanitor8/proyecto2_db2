@@ -87,7 +87,9 @@ def run(session):
                 print(update_relationship (session, update_info))
 
             elif opcion_cliente == "9":
-                eliminar_usuario(global_dpi)
+                label, key_property, key_value = eliminar_usuario(global_dpi)
+                user_info = get_node_info(session, label, key_property, key_value)
+                print(delete_node(session, user_info))
 
             elif opcion_cliente == "10":
                 label, key_property, key_value = informacion_usuario(global_dpi)
@@ -100,7 +102,12 @@ def run(session):
                 print(find_associated_accounts(session, node_label, key_property, key_value))
 
             elif opcion_cliente == "12":
-                informacion_cuenta(global_dpi)
+                node_label, key_property, key_value = ver_cuentas(global_dpi)
+                print(find_associated_accounts(session, node_label, key_property, key_value))
+
+                label, key_property, key_value = informacion_cuenta(global_dpi)
+                cuenta_info = get_node_info(session, label, key_property, key_value)
+                print_node_info(cuenta_info)
 
             elif opcion_cliente == "13":
                 print("Regresando al menú principal...")
