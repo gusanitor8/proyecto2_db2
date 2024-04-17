@@ -25,15 +25,13 @@ tit_roles = ["ADMIN", "VIEWER"]
 
 
 class DataGenerator:
-    def __init__(self, fraud_limit: int, no_of_accounts: int, no_of_companies: int, no_of_persons: int, filepath = ""):
+    def __init__(self, fraud_limit: int, no_of_accounts: int, no_of_companies: int, no_of_persons: int):
         if no_of_persons + no_of_companies >= no_of_accounts:
             raise Exception("La suma del numero de personas y empreesas debe ser menor al numero de cuentas")
 
         self.no_of_accounts = no_of_accounts
         self.no_of_companies = no_of_companies
         self.no_of_persons = no_of_persons
-
-        self.filepath = filepath
 
         self.account_id = 0
         self.empresa_nit = 0
@@ -83,8 +81,8 @@ class DataGenerator:
         df_relations = pd.DataFrame(all_rows_relations, columns=columns_transition)
         df_nodes = pd.DataFrame(all_rows_nodes, columns=columns)
 
-        df_relations.to_csv(self.filepath + "relations.csv", index=False)
-        df_nodes.to_csv(self.filepath + "nodes.csv", index=False)
+        df_relations.to_csv("relations.csv", index=False)
+        df_nodes.to_csv("nodes.csv", index=False)
 
     def make_cuenta_monetaria(self):
         index_dict = self.index_dict
