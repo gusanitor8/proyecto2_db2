@@ -68,7 +68,7 @@ def run(session):
                 print(create_node(session, info_nodo))
 
             elif opcion_cliente == "4":
-                agregar_celular_correo(global_dpi)
+                agregar_celular_correo(global_dpi, session)
 
             elif opcion_cliente == "5":
                 hacer_transferencia(global_dpi)

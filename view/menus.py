@@ -243,18 +243,21 @@ def crear_cuenta(session):
 
 
 #4
-def agregar_celular_correo(global_dpi):
+def agregar_celular_correo(global_dpi, session):
     dpi = global_dpi
     print("Qué desea agregar?")
     opcion_agregar = input("1. Celular, 2. Correo: ")
     if opcion_agregar == "1":
         celular = input("Ingrese el número de celular: ")
-        success_message("El número de celular ha sido agregado exitosamente.")
-        menu_principal()  # Regresar al menú principal
+        node_info = get_node_info(session, "Individuo", "dpi", dpi)["properties"]["telefono"] = celular
+        print(update_node_properties(session, node_info))
+    
     elif opcion_agregar == "2":
         correo = input("Ingrese la dirección de correo electrónico: ")
-        success_message("La dirección de correo electrónico ha sido agregada exitosamente.")
-        menu_principal()  # Regresar al menú principal
+        node_info = get_node_info(session, "Individuo", "dpi", dpi)["properties"]["email"] = correo
+        print(update_node_properties(session, node_info))
+    else:
+        print("Opción inválida. Por favor, ingrese un número del 1 al 2.")
 
 
 # 5
