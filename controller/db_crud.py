@@ -61,7 +61,7 @@ def create_node(session, node_info):
         properties_string = ', '.join([f"{k}: ${k}" for k in node_info['properties']])
         query = f"CREATE (n:{label_string} {{{properties_string}}}) RETURN n"
         result = session.run(query, **node_info['properties'])
-        return f"SUCCESS: Node with {node_info['key_property']}='{node_info['key_value']}' created successfully."
+        return f"SUCCESS: Node with {node_info['key_property']}='{node_info['key_value']}' created."
 
 
 def create_relationship(session, node1_info, node2_info, relationship_type, relationship_properties=None):

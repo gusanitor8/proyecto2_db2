@@ -1,5 +1,5 @@
 import pandas as pd
-from db_crud import *
+from controller.db_crud import *
 
 
 def process_csv_nodes(csv_filepath, session):
@@ -53,7 +53,7 @@ def process_csv_nodes(csv_filepath, session):
                     property_name = col.replace('_empresa', '')
                     if property_name == 'nit':
                         key_property = 'nit'
-                        key_valccue = value
+                        key_value = value
                     properties[property_name] = value
 
                 elif '_individuo' in col:
@@ -156,7 +156,7 @@ def process_csv_relationships(csv_filepath, session):
 
         # Create relationship if node information is available
         if node1_info and node2_info:
-            create_relationship(session, node1_info, node2_info, 'TITULAR', relationship_properties)
+            print(create_relationship(session, node1_info, node2_info, 'TITULAR', relationship_properties))
 
         # Clear node and relationship information
         node1_info = {}
@@ -164,7 +164,7 @@ def process_csv_relationships(csv_filepath, session):
         relationship_properties = {}
 
         # Mapping the columns to the corresponding nodes and relationships
-        if pd.notna(row['cuenta_origen_tran']) and pd.notna(row['cuenta_destino_trans']):
+        if pd.notna(row['cuenta_origen_tran']) and pd.notna(row['cuenta_destino_tran']):
             node1_info = {
                 'labels': ['Cuenta'],
                 'key_property': 'no_cuenta',
@@ -185,11 +185,11 @@ def process_csv_relationships(csv_filepath, session):
                 relationship_properties['ubicacion'] = row['ubicacion_tran']
             if pd.notna(row['tipo_tran']):
                 relationship_properties['tipo'] = row['tipo_tran']
-            if pd.notna(row['alerta_trans']):
+            if pd.notna(row['alerta_tran']):
                 relationship_properties['alerta'] = row['alerta_tran']
             if pd.notna(row['monto_tran']):
                 relationship_properties['monto'] = row['monto_tran']
 
             # create relationship if node information is available
             if node1_info and node2_info:
-                create_relationship(session, node1_info, node2_info, 'TRANSACCION', relationship_properties)
+                print(create_relationship(session, node1_info, node2_info, 'TRANSACCION', relationship_properties))
