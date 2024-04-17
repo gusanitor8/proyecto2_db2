@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from utils.utils import*
 """
 Structure of node_info:
 {
@@ -13,7 +13,11 @@ Structure of node_info:
     'key_value': 'value1'            # The value of the key property to identify the node uniquely
 }
 """
-
+def get_lates_account_number(session):
+    query = "MATCH (c:Cuenta) RETURN c.no_cuenta ORDER BY c.no_cuenta DESC LIMIT 1"
+    result = session.run(query)
+    record = result.single()
+    return record['c.no_cuenta']
 
 def find_node(session, node_info):
     """
@@ -358,22 +362,6 @@ def find_transaction_by_id(session, transaction_id):
         return transaction_info
     else:
         raise ValueError("No se encontró la transacción con el ID proporcionado.")
-
-
-def input_int(message):
-    while True:
-        try:
-            return int(input(message))
-        except ValueError:
-            print("Por favor, ingrese un número entero válido.")
-
-
-def input_float(message):
-    while True:
-        try:
-            return float(input(message))
-        except ValueError:
-            print("Por favor, ingrese un número válido.")
 
 
 def handle_transaction(session, transaction_type='TRANSFERENCIA'):

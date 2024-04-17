@@ -2,6 +2,7 @@ from view.menus import *
 from controller.controller_functions import deactivate_user_accounts, mark_account_as_fraud, \
     edit_fraud_for_user_accounts, rm_fraud_prop_from_user_titulations, edit_fraude_in_titulacion
 from controller.db_crud import *
+from utils.utils import *
 
 global_dpi = ""
 
@@ -50,25 +51,30 @@ def run(session):
 
         # Cliente
         elif opcion_principal == "2":
+
             global_dpi = input_int("Ingrese su DPI: ")
 
             opcion_cliente = modo_cliente()
 
             if opcion_cliente == "1":
-                informacion_nodo = crear_usuario_individuo(global_dpi)
-                # print(create_node(session, informacion_nodo))
+                informacion_nodo = crear_usuario_individuo()
+                print(create_node(session, informacion_nodo))
+
 
             elif opcion_cliente == "2":
-                crear_usuario_empresa()
+                info_nodo = crear_usuario_empresa()
+                print(create_node(session, info_nodo))
+
 
             elif opcion_cliente == "3":
-                crear_cuenta(global_dpi)
+                info_nodo = crear_cuenta(session)
+                print(create_node(session, info_nodo))
 
             elif opcion_cliente == "4":
-                agregar_celular_correo(global_dpi)
+                agregar_celular_correo(global_dpi, session)
 
             elif opcion_cliente == "5":
-                hacer_transferencia(global_dpi)
+                hacer_transferencia(session)
 
             elif opcion_cliente == "6":
                 eliminar_propiedades(global_dpi)
