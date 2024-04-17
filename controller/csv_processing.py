@@ -1,8 +1,22 @@
 import pandas as pd
-from db_crud import create_node
+from db_crud import *
 
 
 def process_csv_nodes(csv_filepath, session):
+    """
+    Process a CSV file containing node data and create nodes in the database.
+
+    Args:
+        csv_filepath (str): The file path of the CSV file.
+        session: The session object for interacting with the database.
+
+    Raises:
+        ValueError: If the CSV format is not valid or the row data is invalid.
+
+    Returns:
+        None
+    """
+
     # Read the CSV file into a DataFrame
     df = pd.read_csv(csv_filepath)
 
@@ -39,7 +53,8 @@ def process_csv_nodes(csv_filepath, session):
                     property_name = col.replace('_empresa', '')
                     if property_name == 'nit':
                         key_property = 'nit'
-                        key_value = value
+                        key_valccue = value
+                    properties[property_name] = value
 
                 elif '_individuo' in col:
                     labels.add('Individuo')
@@ -83,3 +98,94 @@ def process_csv_nodes(csv_filepath, session):
             print(create_node(session, node_info))
         else:
             raise ValueError("Invalid row data. Please check the CSV file.")
+        
+
+def process_csv_relationships(csv_filepath, session):
+    # Read the CSV file into a DataFrame
+    df = pd.read_csv(csv_filepath)
+
+    # Required columns for the CSV file
+    required_columns = [
+       'dpi_titular', 'nit_titular', 'no_cuenta_titular', 'fecha_inicio_titular', 
+       'rol_titular', 'estado_titular', 'cuenta_origen_trans', 'cuenta_destino_trans', 
+       'fecha_trans', 'descripcion_trans', 'ubicacion_trans', 'tipo_trans', 'alerta_trans'
+    ]
+
+    # Validate the format of the CSV file
+    if not all(column in df.columns for column in required_columns):
+        raise ValueError("CSV format not valid: missing required columns")
+    
+    # Loop through the rows of the DataFrame
+    for index, row in df.iterrows():
+        # Variables to store node and relationship information
+        node1_info = {}
+        node2_info = {}
+        relationship_properties = {}
+
+        # Mapping the columns to the corresponding nodes and relationships
+        if pd.notna(row['dpi_titular']):
+            node1_info = {
+                'labels': ['Individuo'],
+                'key_property': 'DPI_individuo',
+                'key_value': row['dpi_titular']
+            }
+        elif pd.notna(row['nit_titular']):
+            node1_info = {
+                'labels': ['Empresa'],
+                'key_property': 'NIT_empresa',
+                'key_value': row['nit_titular']
+            }
+
+
+        if pd.notna(row['no_cuenta_titular']):
+            node2_info = {
+                'labels': ['Cuenta'],
+                'key_property': 'No_Cuenta_cuenta',
+                'key_value': row['no_cuenta_titular']
+            }
+
+        # Create relationship properties
+        if pd.notna(row['fecha_inicio_titular']):
+            relationship_properties['fecha_inicio'] = row['fecha_inicio_titular']
+        if pd.notna(row['rol_titular']):
+            relationship_properties['rol'] = row['rol_titular']
+        if pd.notna(row['estado_titular']):
+            relationship_properties['estado'] = row['estado_titular']
+
+        # Create relationship if node information is available
+        if node1_info and node2_info:
+            create_relationship(session, node1_info, node2_info, 'TITULAR', relationship_properties)
+
+        # Clear node and relationship information
+        node1_info = {}
+        node2_info = {}
+        relationship_properties = {}
+
+        # Mapping the columns to the corresponding nodes and relationships
+        if pd.notna(row['cuenta_origen_trans']) and pd.notna(row['cuenta_destino_trans']):
+            node1_info = {
+                'labels': ['Cuenta'],
+                'key_property': 'No_Cuenta_cuenta',
+                'key_value': row['cuenta_origen_trans']
+            }
+            node2_info = {
+                'labels': ['Cuenta'],
+                'key_property': 'No_Cuenta_cuenta',
+                'key_value': row['cuenta_destino_trans']
+            }
+
+            # Add relationship properties
+            if pd.notna(row['fecha_trans']):
+                relationship_properties['fecha'] = row['fecha_trans']
+            if pd.notna(row['descripcion_trans']):
+                relationship_properties['descripcion'] = row['descripcion_trans']
+            if pd.notna(row['ubicacion_trans']):
+                relationship_properties['ubicacion'] = row['ubicacion_trans']
+            if pd.notna(row['tipo_trans']):
+                relationship_properties['tipo'] = row['tipo_trans']
+            if pd.notna(row['alerta_trans']):
+                relationship_properties['alerta'] = row['alerta_trans']
+
+            # create relationship if node information is available
+            if node1_info and node2_info:
+                create_relationship(session, node1_info, node2_info, 'TRANSACCION', relationship_properties)
