@@ -7,7 +7,7 @@ from utils.utils import *
 global_dpi = ""
 
 
-def run():
+def run(session):
     while True:
         opcion_principal = menu_principal()
 
