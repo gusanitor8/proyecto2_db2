@@ -291,26 +291,59 @@ def find_transaction_by_id(session, transaction_id):
         raise ValueError("No se encontró la transacción con el ID proporcionado.")
 
 
+def input_int(message):
+    while True:
+        try:
+            return int(input(message))
+        except ValueError:
+            print("Por favor, ingrese un número entero válido.")
+
+
+def input_float(message):
+    while True:
+        try:
+            return float(input(message))
+        except ValueError:
+            print("Por favor, ingrese un número válido.")
+
+
 def handle_transaction(session, transaction_type='TRANSFERENCIA'):
-    # Solicitar información de la transacción
-    from_account = int(input("Ingrese el número de la cuenta origen: "))
+    # Solicitar información de la transacción de forma segura
+    from_account = input_int("Ingrese el número de la cuenta origen: ")
     from_account_info = get_node_info(session, 'Cuenta', 'no_cuenta', from_account)
-    to_account = int(input("Ingrese el número de la cuenta destino: "))
+    to_account = input_int("Ingrese el número de la cuenta destino: ")
     to_account_info = get_node_info(session, 'Cuenta', 'no_cuenta', to_account)
-    amount = float(input("Ingrese el monto de la transacción: "))
+    
+    # Validar que las cuentas estén activas
+    if not from_account_info['properties']['estado']:
+        raise ValueError("La cuenta origen está desactivada y no puede realizar transacciones.")
+    if not to_account_info['properties']['estado']:
+        raise ValueError("La cuenta destino está desactivada y no puede recibir transacciones.")
+
+    amount = input_float("Ingrese el monto de la transacción: ")
     description = input("Ingrese una descripción para la transacción (puede dejarlo en blanco): ")
     ubicacion = input("Ingrese la ubicación de la transacción (puede dejarlo en blanco): ")
 
     # Verificar condiciones de saldo y límite de retiro
     if amount > from_account_info['properties']['saldo'] or amount > from_account_info['properties']['limite_retiro']:
         raise ValueError("La transacción excede el límite de retiro o el saldo disponible.")
+    if from_account_info['properties']['divisa'] == 'GTQ':
+        if amount > 8000:
+            alert = True
+        else:
+            alert = False
+    elif from_account_info['properties']['divisa'] == 'USD':
+        if amount > 1000:
+            alert = True
+        else:
+            alert = False
 
     # Preparar las propiedades de la transacción, excluyendo las vacías
     transaction_properties = {
         'monto': amount,
         'fecha': datetime.now(),
         'tipo': transaction_type,
-        'alerta': False
+        'alerta': alert
     }
 
     if description:  # Solo añadir descripción si no está vacía
