@@ -12,18 +12,26 @@ def success_message(message):
     print("¡Éxito!", message)
 
 # Función para mostrar el Menú 2 - Modo Administrador
-def menu_administrador():
-    global global_dpi
+def modo_administrador():
+    while True:
+        try:
+            print("\nSe ha ingresado como Usuario Administrador. \n¿Qué deseas realizar?")
+            print("1. Desactivar cuenta de usuario o empresa")
+            print("2. Clasificar cuentas de un usuario como fraudulentas")
+            print("3. Editar la propiedad de fraude de una cuenta de usuario")
+            print("4. Editar la propiedad de fraude de todas las cuentas de un usuario")
+            print("5. Borrar la propiedad de fraude de una titulación o varias")
+    
+            opcion = input("Ingrese el número de la opción que deseas: ")
+    
+            if opcion not in ["1", "2", "3", "4", "5"]:
+                raise ValueError("Opción inválida. Por favor ingresa un número del 1 al 5.")
+            
+            return opcion
+        except ValueError as e:
+            print("Error:", e)
 
-    print("\nSe ha ingresado como Usuario Administrador. \n¿Qué deseas realizar?")
-    print("1. Desactivar cuenta de usuario o empresa")
-    print("2. Clasificar cuentas de un usuario como fraudulentas")
-    print("3. Editar la propiedad de fraude de una cuenta de usuario")
-    print("4. Editar la propiedad de fraude de todas las cuentas de un usuario")
-    print("5. Borrar la propiedad de fraude de una titulación o varias")
-
-    opcion = input("Ingrese el número de la opción que deseas: ")
-
+def menu_administrador(opcion):
     if opcion == "1":
         print("\nHas seleccionado desactivar cuenta de usuario o empresa.")
         tipo = input("Elige para qué tipo de usuario deseas desactivar la cuenta (1: Usuario, 2: Empresa): ")
@@ -78,7 +86,7 @@ def menu_administrador():
             menu_principal()  # Regresar al menú principal
 
 # Función para mostrar el Menú 3 - Modo Cliente
-def menu_cliente():
+def modo_cliente():
     global global_dpi
 
     print("\nSe ha ingresado como Usuario Cliente. ¿Qué deseas hacer?")
@@ -97,6 +105,9 @@ def menu_cliente():
 
     opcion = input("Ingrese el número de la opción que deseas: ")
 
+    return opcion
+
+def menu_cliente(opcion):
     if opcion == "1":
         dpi = global_dpi
         nombre = input("Ingrese el nombre del nuevo usuario: ")
@@ -206,11 +217,13 @@ def menu_principal():
     opcion = input("Ingrese el número de la opción que deseas: ")
 
     if opcion == "1":
-        menu_administrador()
+        opcion_administrador = modo_administrador()  # Llama a modo_administrador() en lugar de menu_administrador()
+        menu_administrador(opcion_administrador)
     elif opcion == "2":
         global_dpi = input("Ingrese su DPI: ")
         global_nit = input("Ingrese su NIT: ")
-        menu_cliente()
+        opcion_cliente = modo_cliente()  # Llama a modo_cliente() en lugar de menu_cliente()
+        menu_cliente(opcion_cliente)
     elif opcion == "3":
         print("Gracias por utilizar nuestros servicios. ¡Hasta luego!")
         print("")
