@@ -8,16 +8,17 @@ from faker import Faker
 import random as rd
 import pandas as pd
 
-columns = ["nombre_empresa", "nit_empresa", "direccion_empresa", "regimen_empresa", "sector_empresa",
-           "telefono_empresa", "email_empresa", "rep_legal_empresa", "fecha_creacion_empresa", "nombre_individuo",
-           "edad_individuo", "dpi_individuo", "nit_individuo", "direccion_individuo", "telefono_individuo",
-           "email_individuo", "no_cuenta_cuenta", "saldo_cuenta", "fecha_apertura_cuenta", "divisa_cuenta",
-           "estado_cuenta", "limite_retiro_monetaria", "tasa_interes_ahorro", "lmite_retiro_ahorro", "objetivo_ahorro",
-           "vencimiento_plazo", "capital_inicial_plazo", "frecuencia_pago_plazo", "tasa_interes_plazo"]
+columns = ['nombre_empresa', 'nit_empresa', 'direccion_empresa', 'regimen_empresa', 'sector_empresa',
+           'telefono_empresa', 'email_empresa', 'representante_legal_empresa', 'fecha_creacion_empresa',
+           'nombre_individuo', 'edad_individuo', 'dpi_individuo', 'nit_individuo', 'direccion_individuo',
+           'telefono_individuo', 'email_individuo', 'no_cuenta_cuenta', 'saldo_cuenta', 'fecha_apertura_cuenta',
+           'divisa_cuenta', 'estado_cuenta', 'limite_retiro_monetaria', 'tasa_interes_ahorro', 'limite_retiro_ahorro',
+           'objetivo_ahorro', 'vencimiento_plazo', 'capital_inicial_plazo', 'frecuencia_pago_plazo',
+           'tasa_interes_plazo']
 
-columns_transition = ["dpi_tit", "nit_tit", "no_cuenta_tit", "rol_tit", "fecha_de_inicio_tit", "estado_tit",
-                      "cuenta_origen_tran", "cuenta_destino_tran", "monto_tran", "fecha_tran", "descripcion_tran",
-                      "ubicacion_tran", "tipo_tran", "alerta_tran"]
+columns_transition = ['dpi_titular', 'nit_titular', 'no_cuenta_titular', 'fecha_inicio_titular', 'rol_titular',
+                      'estado_titular', 'cuenta_origen_tran', 'cuenta_destino_tran', 'fecha_tran',
+                      'descripcion_tran', 'ubicacion_tran', 'tipo_tran', 'alerta_tran']
 
 divizas = ["GTQ", "USD"]
 tit_roles = ["ADMIN", "VIEWER"]
@@ -83,7 +84,6 @@ class DataGenerator:
         df_relations.to_csv("relations.csv", index=False)
         df_nodes.to_csv("nodes.csv", index=False)
 
-
     def make_cuenta_monetaria(self):
         index_dict = self.index_dict
         account = [None] * len(columns)
@@ -100,7 +100,6 @@ class DataGenerator:
         self.cuentas.append(self.account_id)
         self.cuentas_trans_out.append(self.account_id)
         self.account_id += 1
-
 
         return account
 
@@ -122,7 +121,6 @@ class DataGenerator:
         self.cuentas.append(self.account_id)
         self.cuentas_trans_out.append(self.account_id)
         self.account_id += 1
-
 
         return account
 
@@ -159,7 +157,7 @@ class DataGenerator:
         company[index_dict["sector_empresa"]] = self.faker.sentence()
         company[index_dict["telefono_empresa"]] = self.faker.phone_number()
         company[index_dict["email_empresa"]] = self.faker.email()
-        company[index_dict["rep_legal_empresa"]] = self.faker.name()
+        company[index_dict["representante_legal_empresa"]] = self.faker.name()
         company[index_dict["fecha_creacion_empresa"]] = self.faker.iso8601()
 
         # Actualizamos variables
@@ -220,11 +218,11 @@ class DataGenerator:
             relation = [None] * len(columns_transition)
             account = shuffled_accounts.pop()
 
-            relation[self.index_dict_relations["dpi_tit"]] = person
-            relation[self.index_dict_relations["no_cuenta_tit"]] = account
-            relation[self.index_dict_relations["rol_tit"]] = rd.choice(tit_roles)
-            relation[self.index_dict_relations["fecha_de_inicio_tit"]] = self.faker.iso8601()
-            relation[self.index_dict_relations["estado_tit"]] = rd.choice([True, True, True, True, True, False])
+            relation[self.index_dict_relations["dpi_titular"]] = person
+            relation[self.index_dict_relations["no_cuenta_titular"]] = account
+            relation[self.index_dict_relations["rol_titular"]] = rd.choice(tit_roles)
+            relation[self.index_dict_relations["fecha_de_inicio_titular"]] = self.faker.iso8601()
+            relation[self.index_dict_relations["estado_titular"]] = rd.choice([True, True, True, True, True, False])
 
             relations.append(relation)
 
@@ -232,11 +230,11 @@ class DataGenerator:
             relation = [None] * len(columns_transition)
             account = shuffled_accounts.pop()
 
-            relation[self.index_dict_relations["nit_tit"]] = company
-            relation[self.index_dict_relations["no_cuenta_tit"]] = account
-            relation[self.index_dict_relations["rol_tit"]] = rd.choice(tit_roles)
-            relation[self.index_dict_relations["fecha_de_inicio_tit"]] = self.faker.iso8601()
-            relation[self.index_dict_relations["estado_tit"]] = rd.choice([True, True, True, True, True, False])
+            relation[self.index_dict_relations["nit_titular"]] = company
+            relation[self.index_dict_relations["no_cuenta_titular"]] = account
+            relation[self.index_dict_relations["rol_titular"]] = rd.choice(tit_roles)
+            relation[self.index_dict_relations["fecha_de_inicio_titular"]] = self.faker.iso8601()
+            relation[self.index_dict_relations["estado_titular"]] = rd.choice([True, True, True, True, True, False])
 
         # hacemos una segunda iteracion sobre las personas y empresas para asegurarnos que todas las cuentas tengan
         # al menos una titulacion
@@ -251,11 +249,11 @@ class DataGenerator:
                 empresa = rd.choice(empresas_list)
                 relation = [None] * len(columns_transition)
 
-                relation[self.index_dict_relations["nit_tit"]] = empresa
-                relation[self.index_dict_relations["no_cuenta_tit"]] = shuffled_accounts.pop()
-                relation[self.index_dict_relations["rol_tit"]] = rd.choice(tit_roles)
-                relation[self.index_dict_relations["fecha_de_inicio_tit"]] = self.faker.iso8601()
-                relation[self.index_dict_relations["estado_tit"]] = rd.choice([True, True, True, True, True, False])
+                relation[self.index_dict_relations["nit_titular"]] = empresa
+                relation[self.index_dict_relations["no_cuenta_titular"]] = shuffled_accounts.pop()
+                relation[self.index_dict_relations["rol_titular"]] = rd.choice(tit_roles)
+                relation[self.index_dict_relations["fecha_de_inicio_titular"]] = self.faker.iso8601()
+                relation[self.index_dict_relations["estado_titular"]] = rd.choice([True, True, True, True, True, False])
 
                 relations.append(relation)
 
@@ -263,11 +261,11 @@ class DataGenerator:
                 persona = rd.choice(personas_list)
                 relation = [None] * len(columns_transition)
 
-                relation[self.index_dict_relations["dpi_tit"]] = persona
-                relation[self.index_dict_relations["no_cuenta_tit"]] = shuffled_accounts.pop()
-                relation[self.index_dict_relations["rol_tit"]] = rd.choice(tit_roles)
-                relation[self.index_dict_relations["fecha_de_inicio_tit"]] = self.faker.iso8601()
-                relation[self.index_dict_relations["estado_tit"]] = rd.choice([True, True, True, True, True, False])
+                relation[self.index_dict_relations["dpi_titular"]] = persona
+                relation[self.index_dict_relations["no_cuenta_titular"]] = shuffled_accounts.pop()
+                relation[self.index_dict_relations["rol_titular"]] = rd.choice(tit_roles)
+                relation[self.index_dict_relations["fecha_de_inicio_titular"]] = self.faker.iso8601()
+                relation[self.index_dict_relations["estado_titular"]] = rd.choice([True, True, True, True, True, False])
 
                 relations.append(relation)
 
