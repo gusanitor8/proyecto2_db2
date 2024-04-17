@@ -5,7 +5,7 @@ from neo4j import GraphDatabase
 # Global variable for Neo4j driver
 neo4j_driver = None
 
-def load_credentials(filepath='.env'):
+def load_credentials(filepath='./'):
     """
     Load the credentials from a .env file.
 

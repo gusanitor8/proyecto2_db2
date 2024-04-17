@@ -35,33 +35,33 @@ def find_node(session, node_info):
 
 
 def create_node(session, node_info):
-        """
-        Creates a node in the database with the given session and node information.
+    """
+    Creates a node in the database with the given session and node information.
 
-        Parameters:
-        - session: The session object used to interact with the database.
-        - node_info: A dictionary containing the information of the node to be created.
-                                 It should have the following keys:
-                                 - 'labels': A list of labels to be assigned to the node.
-                                 - 'properties': A dictionary of properties to be assigned to the node.
-                                                                 The keys are the property names and the values are the property values.
-                                 - 'key_property': The name of the property used as the key to check if the node already exists.
-                                 - 'key_value': The value of the key property used to check if the node already exists.
+    Parameters:
+    - session: The session object used to interact with the database.
+    - node_info: A dictionary containing the information of the node to be created.
+                             It should have the following keys:
+                             - 'labels': A list of labels to be assigned to the node.
+                             - 'properties': A dictionary of properties to be assigned to the node.
+                                                             The keys are the property names and the values are the property values.
+                             - 'key_property': The name of the property used as the key to check if the node already exists.
+                             - 'key_value': The value of the key property used to check if the node already exists.
 
-        Returns:
-        - A string indicating the result of the operation. If the node is created successfully, it returns
-            "SUCCESS: Node with {key_property}='{key_value}' created successfully.".
-            If the node already exists, it raises a RuntimeError with the message
-            "Node with {key_property} = '{key_value}' already exists."
-        """
-        if find_node(session, node_info):
-                raise RuntimeError(f"Node with {node_info['key_property']} = '{node_info['key_value']}' already exists.")
+    Returns:
+    - A string indicating the result of the operation. If the node is created successfully, it returns
+        "SUCCESS: Node with {key_property}='{key_value}' created successfully.".
+        If the node already exists, it raises a RuntimeError with the message
+        "Node with {key_property} = '{key_value}' already exists."
+    """
+    if find_node(session, node_info):
+        raise RuntimeError(f"Node with {node_info['key_property']} = '{node_info['key_value']}' already exists.")
 
-        label_string = ":".join(node_info['labels'])
-        properties_string = ', '.join([f"{k}: ${k}" for k in node_info['properties']])
-        query = f"CREATE (n:{label_string} {{{properties_string}}}) RETURN n"
-        result = session.run(query, **node_info['properties'])
-        return f"SUCCESS: Node with {node_info['key_property']}='{node_info['key_value']}' created."
+    label_string = ":".join(node_info['labels'])
+    properties_string = ', '.join([f"{k}: ${k}" for k in node_info['properties']])
+    query = f"CREATE (n:{label_string} {{{properties_string}}}) RETURN n"
+    result = session.run(query, **node_info['properties'])
+    return f"SUCCESS: Node with {node_info['key_property']}='{node_info['key_value']}' created."
 
 
 def create_relationship(session, node1_info, node2_info, relationship_type, relationship_properties=None):
@@ -100,3 +100,10 @@ def create_relationship(session, node1_info, node2_info, relationship_type, rela
         return f"SUCCESS: Relationship {relationship_type} created between {node1_info['key_value']} and {node2_info['key_value']}."
     else:
         raise RuntimeError("Failed to create relationship.")
+
+
+def get_node(session, node_info):
+    label_string = ":".join(node_info['labels'])
+    query = f"MATCH (n:{label_string}) WHERE n.{node_info['key_property']} = $key_value RETURN n"
+    result = session.run(query, key_value=node_info['key_value'])
+    return result.single()[0]
