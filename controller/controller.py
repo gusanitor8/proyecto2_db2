@@ -56,7 +56,7 @@ def run():
 
             if opcion_cliente == "1":
                 informacion_nodo = crear_usuario_individuo(global_dpi)
-                print(create_node(session, informacion_nodo))
+                # print(create_node(session, informacion_nodo))
 
             elif opcion_cliente == "2":
                 crear_usuario_empresa()
