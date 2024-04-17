@@ -32,9 +32,11 @@ def menu_administrador():
             print("Estas son las cuentas de ese usuario.")
             cuenta = input("Ingrese el No. de Cuenta que desea desactivar: ")
             success_message("La cuenta ha sido desactivada exitosamente.")
+            menu_principal()  # Regresar al menú principal
         elif tipo == "2":
             print(input("Ingrese el NIT de la empresa: "))
             success_message("La cuenta de la empresa ha sido desactivada exitosamente.")
+            menu_principal()  # Regresar al menú principal
 
     elif opcion == "2":
         print(input("Ingrese el DPI del usuario: "))
@@ -43,9 +45,11 @@ def menu_administrador():
         confirmacion = input("1. Si, 2. No: ")
         if confirmacion == "1":
             success_message("Todas las cuentas del usuario han sido marcadas como fraudulentas.")
+            menu_principal()  # Regresar al menú principal
         elif confirmacion == "2":
             print("No se han marcado las cuentas como fraudulentas.")
-            # Que vuelva al menu anterior
+            menu_administrador()  # Regresar al menú anterior
+            menu_principal()  # Regresar al menú principal
 
     elif opcion == "3":
         print(input("Ingrese el DPI del usuario: "))
@@ -53,12 +57,14 @@ def menu_administrador():
         cuenta = input("Ingrese el No. de Cuenta: ")
         fraude = input("Ingrese el nuevo valor para la propiedad de fraude: ")
         success_message("La propiedad de fraude ha sido actualizada exitosamente para la cuenta.")
+        menu_principal()  # Regresar al menú principal
 
     elif opcion == "4":
         print(input("Ingrese el DPI del usuario: "))
         print("Estas son las cuentas relacionadas al usuario.")
         fraude = input("Ingrese la nueva propiedad de fraude para todas las cuentas: ")
         success_message("Las propiedades de fraude han sido actualizadas exitosamente para todas las cuentas.")
+        menu_principal()  # Regresar al menú principal
 
     elif opcion == "5":
         print(input("Ingrese el DPI del usuario: "))
@@ -66,9 +72,10 @@ def menu_administrador():
         confirmacion = input("1. Si, 2. No: ")
         if confirmacion == "1":
             success_message("La propiedad de fraude ha sido eliminada exitosamente.")
+            menu_principal()  # Regresar al menú principal
         elif confirmacion == "2":
             print("No se ha eliminado la propiedad de fraude.")
-            # Que vuelva al menu anterior
+            menu_principal()  # Regresar al menú principal
 
 # Función para mostrar el Menú 3 - Modo Cliente
 def menu_cliente():
@@ -96,6 +103,7 @@ def menu_cliente():
         edad = input("Ingrese la edad del nuevo usuario: ")
         direccion = input("Ingrese la dirección del nuevo usuario: ")
         success_message("El usuario individuo ha sido creado exitosamente.")
+        menu_principal()  # Regresar al menú principal
 
     elif opcion == "2":
         dpi = global_dpi
@@ -103,11 +111,13 @@ def menu_cliente():
         nombre_empresa = input("Ingrese el nombre de la nueva empresa: ")
         direccion_empresa = input("Ingrese la dirección de la nueva empresa: ")
         success_message("La empresa ha sido creada exitosamente.")
+        menu_principal()  # Regresar al menú principal
 
     elif opcion == "3":
         dpi = global_dpi
         balance = input("Ingrese el balance inicial de la cuenta: ")
         success_message("La cuenta ha sido creada exitosamente.")
+        menu_principal()  # Regresar al menú principal
 
     elif opcion == "4":
         dpi = global_dpi
@@ -116,9 +126,11 @@ def menu_cliente():
         if opcion_agregar == "1":
             celular = input("Ingrese el número de celular: ")
             success_message("El número de celular ha sido agregado exitosamente.")
+            menu_principal()  # Regresar al menú principal
         elif opcion_agregar == "2":
             correo = input("Ingrese la dirección de correo electrónico: ")
             success_message("La dirección de correo electrónico ha sido agregada exitosamente.")
+            menu_principal()  # Regresar al menú principal
 
     elif opcion == "5":
         dpi = global_dpi
@@ -127,6 +139,7 @@ def menu_cliente():
         cuenta_destino = input("Ingrese el No. de Cuenta al que desea transferir: ")
         monto = input("Ingrese el monto a transferir: ")
         success_message("La transferencia se ha realizado exitosamente.")
+        menu_principal()  # Regresar al menú principal
 
     elif opcion == "6":
         dpi = global_dpi
@@ -134,8 +147,10 @@ def menu_cliente():
         opcion_eliminar = input("1. Celular, 2. Correo: ")
         if opcion_eliminar == "1":
             success_message("El número de celular ha sido eliminado exitosamente.")
+            menu_principal()  # Regresar al menú principal
         elif opcion_eliminar == "2":
             success_message("La dirección de correo electrónico ha sido eliminada exitosamente.")
+            menu_principal()  # Regresar al menú principal
 
     elif opcion == "7":
         dpi = global_dpi
@@ -144,13 +159,17 @@ def menu_cliente():
         if opcion_actualizar == "1":
             nuevo_celular = input("Ingrese el nuevo número de celular: ")
             success_message("El número de celular ha sido actualizado exitosamente.")
+            menu_principal()  # Regresar al menú principal
         elif opcion_actualizar == "2":
             nuevo_correo = input("Ingrese la nueva dirección de correo electrónico: ")
             success_message("La dirección de correo electrónico ha sido actualizada exitosamente.")
+            menu_principal()  # Regresar al menú principal
 
     elif opcion == "8":
         dpi = global_dpi
         print("Ingrese la nueva titulación para este usuario.")
+        success_message("La titulación ha sido actualizada exitosamente.")
+        menu_principal()  # Regresar al menú principal
 
     elif opcion == "9":
         print("Esta seguro que quiere eliminar su usuario?")
@@ -158,26 +177,31 @@ def menu_cliente():
         if confirmacion == "1":
             dpi = global_dpi
             success_message("El usuario ha sido eliminado exitosamente.")
+            menu_principal()  # Regresar al menú principal
         elif confirmacion == "2":
             print("No se ha eliminado el usuario.")
-            # Que vuelva al menu anterior
+            menu_cliente()  # Regresar al menú anterior
     
     elif opcion == "10":
         dpi = global_dpi
         print("Esta es la información de su usuario.")
+        menu_principal()  # Regresar al menú principal
 
     elif opcion == "11":
         dpi = global_dpi
         print("Estas son sus cuentas.")
+        menu_principal()  # Regresar al menú principal
 
 # Función para mostrar el Menú 1
 def menu_principal():
     global global_dpi
     global global_nit
 
+    print("\n----------------------------------------------------")
     print("Bienvenido a nuestra banca. ¿Cómo deseas entrar?")
     print("1. Modo Administrador")
     print("2. Modo Cliente")
+    print("3. Salir")
 
     opcion = input("Ingrese el número de la opción que deseas: ")
 
@@ -187,6 +211,10 @@ def menu_principal():
         global_dpi = input("Ingrese su DPI: ")
         global_nit = input("Ingrese su NIT: ")
         menu_cliente()
+    elif opcion == "3":
+        print("Gracias por utilizar nuestros servicios. ¡Hasta luego!")
+        print("")
+        exit()
 
 # Programa principal
 menu_principal()
