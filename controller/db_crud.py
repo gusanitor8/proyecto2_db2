@@ -114,6 +114,44 @@ def update_node_properties(session, node_info):
     result = session.run(query, key_value=node_info['key_value'], **node_info['properties'])
     return f"SUCCESS: Node with {node_info['key_property']}='{node_info['key_value']}' updated."
 
+
+def remove_node_property(session, node_info, property_to_remove):
+    """
+    Removes a property from a node in the database.
+
+    Args:
+        session: The Neo4j session object.
+        node_info: A dictionary containing information about the node. It should have the following keys:
+            - 'labels': A list of labels associated with the node.
+            - 'key_property': The property used as the key to find the node.
+            - 'key_value': The value of the key property to search for.
+        property_to_remove: The property to remove from the node.
+
+    Returns:
+        A success message if the property is removed successfully.
+
+    Raises:
+        RuntimeError: If the node does not exist or if the property removal fails.
+    """
+    # Create the Cypher query
+    label_string = ":".join(node_info['labels'])
+    query = f"""
+    MATCH (n:{label_string} {{{node_info['key_property']}: $key_value}})
+    REMOVE n.{property_to_remove}
+    RETURN n
+    """
+
+    # Run the query and collect the results
+    result = session.run(query, key_value=node_info['key_value'])
+    node = result.single()
+
+    if node:
+        return f"SUCCESS: Property '{property_to_remove}' removed from node with {node_info['key_property']}='{node_info['key_value']}'."
+    else:
+        raise RuntimeError(
+            f"Failed to remove property '{property_to_remove}' from node with {node_info['key_property']}='{node_info['key_value']}'.")
+
+
 def update_relationship(session, node1_info, node2_info, relationship_type, new_properties):
     """
     Updates a relationship between two nodes in the database.
@@ -364,3 +402,72 @@ def update_account_balance(session, account_number, amount_change):
     query = f"MATCH (c:Cuenta {{no_cuenta: $account_number}}) SET c.saldo = c.saldo + $amount_change RETURN c.saldo"
     result = session.run(query, account_number=account_number, amount_change=amount_change)
     return result.single()[0]
+
+
+def remove_relationship_property(session, node_orig_info, node_dest_info, property_to_remove, rel_name):
+    """
+    Removes a property from a relationship in the database.
+
+    Args:
+        session: The Neo4j session object.
+        node_orig_info: A dictionary containing information about the origin node. It should have the following keys:
+            - 'labels': A list of labels associated with the node.
+            - 'key_property': The property used as the key to find the node.
+            - 'key_value': The value of the key property to search for.
+        node_dest_info: A dictionary containing information about the destination node. It should have the following keys:
+            - 'labels': A list of labels associated with the node.
+            - 'key_property': The property used as the key to find the node.
+            - 'key_value': The value of the key property to search for.
+        property_to_remove: The property to remove from the relationship.
+        rel_name: The name of the relationship from which the property will be removed.
+
+    Returns:
+        A success message if the property is removed successfully.
+
+    Raises:
+        RuntimeError: If the relationship does not exist or if the property removal fails.
+    """
+    # Create the Cypher query
+    label_string = ":".join(node_orig_info['labels'])
+    label_dest_string = ":".join(node_dest_info['labels'])
+    query = f"""
+    MATCH (n:{label_string} {{{node_orig_info['key_property']}: $key_value}})-[r:{rel_name}]->(m:{label_dest_string} {{{node_dest_info['key_property']}: $key_value_dest}})
+    REMOVE r.{property_to_remove}
+    RETURN r
+    """
+
+    parameters = {
+        'key_value': node_orig_info['key_value'],
+        'key_value_dest': node_dest_info['key_value']
+    }
+
+    # Run the query and collect the results
+    result = session.run(query, **parameters)
+    relationship = result.single()
+
+    if relationship:
+        print(f"SUCCESS: Property '{property_to_remove}' removed from relationship '{rel_name}' between nodes with {node_orig_info['key_property']}='{node_orig_info['key_value']}' and {node_dest_info['key_property']}='{node_dest_info['key_value']}'.")
+    else:
+        raise RuntimeError(
+            f"Failed to remove property '{property_to_remove}' from relationship '{rel_name}' between nodes with {node_orig_info['key_property']}='{node_orig_info['key_value']}' and {node_dest_info['key_property']}='{node_dest_info['key_value']}'.")
+
+
+def get_user_accounts(session, dpi_or_nit, is_dpi: bool):
+    # Define the label based on whether the identifier is a DPI or a NIT
+    label = 'Individuo' if is_dpi else 'Empresa'
+
+    # Define the property based on whether the identifier is a DPI or a NIT
+    property = 'dpi' if is_dpi else 'nit'
+
+    # Create the Cypher query
+    query = f"""
+    MATCH (n:{label} {{{property}: $dpi_or_nit}})-[:TITULAR]->(c:Cuenta)
+    RETURN c
+    """
+
+    # Run the query and collect the results
+    results = session.run(query, dpi_or_nit=dpi_or_nit)
+    accounts = [record['c']._properties['no_cuenta'] for record in results]
+
+    # Return the accounts
+    return accounts
