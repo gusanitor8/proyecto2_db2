@@ -17,7 +17,7 @@ columns = ['nombre_empresa', 'nit_empresa', 'direccion_empresa', 'regimen_empres
            'tasa_interes_plazo']
 
 columns_transition = ['dpi_titular', 'nit_titular', 'no_cuenta_titular', 'fecha_inicio_titular', 'rol_titular',
-                      'estado_titular', 'cuenta_origen_tran', 'cuenta_destino_tran', 'fecha_tran',
+                      'estado_titular', 'cuenta_origen_tran', 'cuenta_destino_tran', 'monto_tran', 'fecha_tran',
                       'descripcion_tran', 'ubicacion_tran', 'tipo_tran', 'alerta_tran']
 
 divizas = ["GTQ", "USD"]
@@ -114,7 +114,7 @@ class DataGenerator:
         account[index_dict["divisa_cuenta"]] = rd.choice(divizas)
         account[index_dict["estado_cuenta"]] = rd.choice([True, False])
         account[index_dict["tasa_interes_ahorro"]] = rd.uniform(0.001, 0.7)
-        account[index_dict["lmite_retiro_ahorro"]] = rd.randint(1000, 10000)
+        account[index_dict["limite_retiro_ahorro"]] = rd.randint(1000, 10000)
         account[index_dict["objetivo_ahorro"]] = self.faker.sentence()
 
         # Actualizamos variables
@@ -221,7 +221,7 @@ class DataGenerator:
             relation[self.index_dict_relations["dpi_titular"]] = person
             relation[self.index_dict_relations["no_cuenta_titular"]] = account
             relation[self.index_dict_relations["rol_titular"]] = rd.choice(tit_roles)
-            relation[self.index_dict_relations["fecha_de_inicio_titular"]] = self.faker.iso8601()
+            relation[self.index_dict_relations["fecha_inicio_titular"]] = self.faker.iso8601()
             relation[self.index_dict_relations["estado_titular"]] = rd.choice([True, True, True, True, True, False])
 
             relations.append(relation)
@@ -233,7 +233,7 @@ class DataGenerator:
             relation[self.index_dict_relations["nit_titular"]] = company
             relation[self.index_dict_relations["no_cuenta_titular"]] = account
             relation[self.index_dict_relations["rol_titular"]] = rd.choice(tit_roles)
-            relation[self.index_dict_relations["fecha_de_inicio_titular"]] = self.faker.iso8601()
+            relation[self.index_dict_relations["fecha_inicio_titular"]] = self.faker.iso8601()
             relation[self.index_dict_relations["estado_titular"]] = rd.choice([True, True, True, True, True, False])
 
         # hacemos una segunda iteracion sobre las personas y empresas para asegurarnos que todas las cuentas tengan
@@ -252,7 +252,7 @@ class DataGenerator:
                 relation[self.index_dict_relations["nit_titular"]] = empresa
                 relation[self.index_dict_relations["no_cuenta_titular"]] = shuffled_accounts.pop()
                 relation[self.index_dict_relations["rol_titular"]] = rd.choice(tit_roles)
-                relation[self.index_dict_relations["fecha_de_inicio_titular"]] = self.faker.iso8601()
+                relation[self.index_dict_relations["fecha_inicio_titular"]] = self.faker.iso8601()
                 relation[self.index_dict_relations["estado_titular"]] = rd.choice([True, True, True, True, True, False])
 
                 relations.append(relation)
@@ -264,7 +264,7 @@ class DataGenerator:
                 relation[self.index_dict_relations["dpi_titular"]] = persona
                 relation[self.index_dict_relations["no_cuenta_titular"]] = shuffled_accounts.pop()
                 relation[self.index_dict_relations["rol_titular"]] = rd.choice(tit_roles)
-                relation[self.index_dict_relations["fecha_de_inicio_titular"]] = self.faker.iso8601()
+                relation[self.index_dict_relations["fecha_inicio_titular"]] = self.faker.iso8601()
                 relation[self.index_dict_relations["estado_titular"]] = rd.choice([True, True, True, True, True, False])
 
                 relations.append(relation)
