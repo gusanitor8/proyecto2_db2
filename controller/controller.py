@@ -1,6 +1,6 @@
 from view.menus import *
 from controller.controller_functions import deactivate_user_accounts, mark_account_as_fraud, \
-    edit_fraud_for_user_accounts, rm_fraud_prop_from_user_titulations, edit_fraude_in_titulacion
+    edit_fraud_for_user_accounts, rm_fraud_prop_from_user_titulations, edit_fraude_in_titulacion, display_trans_history_
 from controller.db_crud import *
 from utils.utils import *
 
@@ -48,6 +48,11 @@ def run(session):
                 print("Regresando al menú principal...")
                 print("")
                 menu_principal()  # Regresar al menú principal
+
+            elif opcion_administrador == "8":
+                account = get_cuenta()
+                display_trans_history_(account)
+
 
         # Cliente
         elif opcion_principal == "2":
@@ -112,6 +117,9 @@ def run(session):
                 print("Regresando al menú principal...")
                 print("")
                 menu_principal(global_dpi)
+
+
+
 
         # Salir
         elif opcion_principal == "3":

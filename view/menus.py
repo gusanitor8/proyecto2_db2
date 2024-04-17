@@ -34,15 +34,20 @@ def modo_administrador():
             print("5. Borrar la propiedad de fraude de las titulaciones de un usuario")
             print("6. Editar la propiedad de fraude en las titulaciones de un usuario")
             print("7. Regresar al menú principal")
+            print("8. Historial de transferencias")
 
             opcion = input("Ingrese el número de la opción que deseas: ")
 
-            if opcion not in ["1", "2", "3", "4", "5", "6"]:
-                raise ValueError("Opción inválida. Por favor ingresa un número del 1 al 5.")
+            if opcion not in ["1", "2", "3", "4", "5", "6", "7", "8"]:
+                raise ValueError("Opción inválida. Por favor ingresa un número del 1 al 8.")
 
             return opcion
         except ValueError as e:
             print("Error:", e)
+
+def get_cuenta():
+    cuenta = input_int("Ingrese el número de cuenta: ")
+    return cuenta
 
 
 def editar_fraude_en_titulaciones():

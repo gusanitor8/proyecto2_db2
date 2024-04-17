@@ -1,5 +1,6 @@
 from controller.db_crud import *
 from controller.db_connection import *
+from view.view_graph import display_trans_history
 
 
 def deactivate_user_accounts(dpi_or_nit, is_dpi: bool):
@@ -170,5 +171,24 @@ def edit_fraude_in_titulacion(dpi_or_nit, is_fraud: bool, is_dpi: bool = True):
 
     except Exception as e:
         raise RuntimeError(f'Failed to edit fraud in titulacion: {e}')
+    finally:
+        close_driver()
+
+
+def display_trans_history_(account_no):
+    try:
+        driver = get_driver()
+        with driver.session() as session:
+            transaction_history(session, account_no)
+
+            node_info = {
+                'labels': ['Cuenta'],
+                'key_property': 'no_cuenta',
+                'key_value': account_no
+            }
+            display_trans_history(session, node_info)
+
+    except Exception as e:
+        raise RuntimeError(f'Failed to display transaction history: {e}')
     finally:
         close_driver()
