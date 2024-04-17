@@ -107,8 +107,8 @@ def process_csv_relationships(csv_filepath, session):
     # Required columns for the CSV file
     required_columns = [
        'dpi_titular', 'nit_titular', 'no_cuenta_titular', 'fecha_inicio_titular', 
-       'rol_titular', 'estado_titular', 'cuenta_origen_trans', 'cuenta_destino_trans', 
-       'fecha_trans', 'descripcion_trans', 'ubicacion_trans', 'tipo_trans', 'alerta_trans'
+       'rol_titular', 'estado_titular', 'cuenta_origen_tran', 'cuenta_destino_tran', 
+       'fecha_tran', 'descripcion_tran', 'ubicacion_tran', 'tipo_tran', 'alerta_tran'
     ]
 
     # Validate the format of the CSV file
@@ -126,13 +126,13 @@ def process_csv_relationships(csv_filepath, session):
         if pd.notna(row['dpi_titular']):
             node1_info = {
                 'labels': ['Individuo'],
-                'key_property': 'DPI_individuo',
+                'key_property': 'dpi',
                 'key_value': row['dpi_titular']
             }
         elif pd.notna(row['nit_titular']):
             node1_info = {
                 'labels': ['Empresa'],
-                'key_property': 'NIT_empresa',
+                'key_property': 'nit',
                 'key_value': row['nit_titular']
             }
 
@@ -140,7 +140,7 @@ def process_csv_relationships(csv_filepath, session):
         if pd.notna(row['no_cuenta_titular']):
             node2_info = {
                 'labels': ['Cuenta'],
-                'key_property': 'No_Cuenta_cuenta',
+                'key_property': 'no_cuenta',
                 'key_value': row['no_cuenta_titular']
             }
 
@@ -162,29 +162,29 @@ def process_csv_relationships(csv_filepath, session):
         relationship_properties = {}
 
         # Mapping the columns to the corresponding nodes and relationships
-        if pd.notna(row['cuenta_origen_trans']) and pd.notna(row['cuenta_destino_trans']):
+        if pd.notna(row['cuenta_origen_tran']) and pd.notna(row['cuenta_destino_trans']):
             node1_info = {
                 'labels': ['Cuenta'],
-                'key_property': 'No_Cuenta_cuenta',
-                'key_value': row['cuenta_origen_trans']
+                'key_property': 'no_cuenta',
+                'key_value': row['cuenta_origen_tran']
             }
             node2_info = {
                 'labels': ['Cuenta'],
-                'key_property': 'No_Cuenta_cuenta',
-                'key_value': row['cuenta_destino_trans']
+                'key_property': 'no_cuenta',
+                'key_value': row['cuenta_destino_tran']
             }
 
             # Add relationship properties
-            if pd.notna(row['fecha_trans']):
-                relationship_properties['fecha'] = row['fecha_trans']
-            if pd.notna(row['descripcion_trans']):
-                relationship_properties['descripcion'] = row['descripcion_trans']
-            if pd.notna(row['ubicacion_trans']):
-                relationship_properties['ubicacion'] = row['ubicacion_trans']
-            if pd.notna(row['tipo_trans']):
-                relationship_properties['tipo'] = row['tipo_trans']
+            if pd.notna(row['fecha_tran']):
+                relationship_properties['fecha'] = row['fecha_tran']
+            if pd.notna(row['descripcion_tran']):
+                relationship_properties['descripcion'] = row['descripcion_tran']
+            if pd.notna(row['ubicacion_tran']):
+                relationship_properties['ubicacion'] = row['ubicacion_tran']
+            if pd.notna(row['tipo_tran']):
+                relationship_properties['tipo'] = row['tipo_tran']
             if pd.notna(row['alerta_trans']):
-                relationship_properties['alerta'] = row['alerta_trans']
+                relationship_properties['alerta'] = row['alerta_tran']
 
             # create relationship if node information is available
             if node1_info and node2_info:
