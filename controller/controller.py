@@ -1,9 +1,12 @@
 from view.menus import *
+from controller.controller_functions import deactivate_user_accounts, mark_account_as_fraud, \
+    edit_fraud_for_user_accounts, rm_fraud_prop_from_user_titulations, edit_fraude_in_titulacion
 from controller.db_crud import *
 
 global_dpi = ""
 
-def run(session):
+
+def run():
     while True:
         opcion_principal = menu_principal()
 
@@ -13,21 +16,34 @@ def run(session):
 
             if opcion_administrador == "1":
                 print("\nHas seleccionado desactivar cuenta de usuario o empresa.")
-                desactivar_cuenta()
+                dpi, is_dpi = desactivar_cuenta()
+                deactivate_user_accounts(dpi, is_dpi=is_dpi)
+
 
             elif opcion_administrador == "2":
-                clasificar_cuentas_fraudulentas()
+                account_no: int = clasificar_cuentas_fraudulentas()
+                mark_account_as_fraud(account_no)
+
 
             elif opcion_administrador == "3":
-                marcar_cuenta_fraudulenta()
+                no_cuenta, fraudulenta = marcar_cuenta_fraudulenta()
+                mark_account_as_fraud(no_cuenta, fraudulenta)
 
             elif opcion_administrador == "4":
-                marcar_cuentas_fraudulentas()
+                dpi, fraude = marcar_cuentas_fraudulentas()
+                edit_fraud_for_user_accounts(dpi, fraude)
 
             elif opcion_administrador == "5":
-                borrar_propiedad_fraude()
+                dpi = borrar_propiedad_fraude()
+                if type(dpi) is int:
+                    rm_fraud_prop_from_user_titulations(dpi)
 
             elif opcion_administrador == "6":
+                dpi, fraude = editar_fraude_en_titulaciones()
+                edit_fraude_in_titulacion(dpi, fraude)
+
+
+            elif opcion_administrador == "7":
                 print("Regresando al menú principal...")
                 print("")
                 menu_principal()  # Regresar al menú principal
@@ -40,7 +56,7 @@ def run(session):
 
             if opcion_cliente == "1":
                 informacion_nodo = crear_usuario_individuo(global_dpi)
-                print(create_node(session, informacion_nodo))
+                # print(create_node(session, informacion_nodo))
 
             elif opcion_cliente == "2":
                 crear_usuario_empresa()
@@ -89,5 +105,3 @@ def run(session):
             print("Gracias por utilizar nuestros servicios. ¡Hasta luego!")
             print("")
             exit()
-
-
