@@ -100,3 +100,29 @@ def create_relationship(session, node1_info, node2_info, relationship_type, rela
         return f"SUCCESS: Relationship {relationship_type} created between {node1_info['key_value']} and {node2_info['key_value']}."
     else:
         raise RuntimeError("Failed to create relationship.")
+
+
+def get_node_info(session, label, key_property, key_value):
+    query = f"MATCH (n:{label}) WHERE n.{key_property} = $key_value RETURN labels(n) AS labels, properties(n) AS properties"
+    result = session.run(query, key_value=key_value)
+    node = result.single()
+
+    if node:
+        labels, properties = node['labels'], node['properties']
+        return {
+            'labels': labels,
+            'properties': properties,
+            'key_property': key_property,
+            'key_value': properties.get(key_property)
+        }
+    else:
+        raise ValueError(f"No node found with {key_property} = '{key_value}'")
+    
+
+def print_node_info(node_info):
+    print('Detalles de'," ".join(node_info['labels']))
+    for key, value in node_info['properties'].items():
+        if isinstance(value, str) and '\n' in value:
+            value = value.replace('\n', ', ')
+        print(f"- {key}: {value}")
+    print()

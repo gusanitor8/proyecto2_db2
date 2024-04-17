@@ -6,8 +6,10 @@ try:
 
     driver = get_driver()
     with driver.session() as session:
-        process_csv_nodes('utils/nodes.csv', session)
-        process_csv_relationships('utils/relations.csv', session)
+        user = get_node_info(session, 'Individuo', 'dpi', 5)
+        print('INFO: Node information retrieved successfully')
+        print_node_info(user)
+        
 
 except Exception as e:
     print(f"ERROR: {e}")
