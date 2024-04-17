@@ -4,19 +4,28 @@ from controller.csv_processing import *
 
 try:
 
-    test_dic = {
-        'labels': ['Individuo'],
-            'properties': {
-                'telefono': '45801692',
-                'email': 'gusanitor8'
-            },
-        'key_property': 'dpi',
-        'key_value': 6.0
+    node1_dic = {
+        'labels': ['Empresa'],
+        'key_property': 'nit',
+        'key_value': 9.0
     }
+
+    node2_dic = {
+        'labels': ['Cuenta'],
+        'key_property': 'no_cuenta',
+        'key_value': 1.0
+    }
+
+    rel_type = 'TITULAR'
+
+    rel_properties = {
+        'pruebita': 'hola!!'
+    }
+
 
     driver = get_driver()
     with driver.session() as session:
-        update_node_properties(session, test_dic)
+        update_relationship(session, node1_dic, node2_dic, rel_type, rel_properties)
         
 
 except Exception as e:

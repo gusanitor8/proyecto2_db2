@@ -114,6 +114,45 @@ def update_node_properties(session, node_info):
     result = session.run(query, key_value=node_info['key_value'], **node_info['properties'])
     return f"SUCCESS: Node with {node_info['key_property']}='{node_info['key_value']}' updated."
 
+def update_relationship(session, node1_info, node2_info, relationship_type, new_properties):
+    """
+    Updates a relationship between two nodes in the database.
+
+    Args:
+        session: The Neo4j session object.
+        node1_info: A dictionary containing information about the first node.
+        node2_info: A dictionary containing information about the second node.
+        relationship_type: The type of relationship to update.
+        new_properties: A dictionary of properties to update on the relationship.
+
+    Returns:
+        A success message if the relationship is updated successfully.
+
+    Raises:
+        RuntimeError: If one or both nodes do not exist or if the relationship update fails.
+    """
+    if not find_node(session, node1_info) or not find_node(session, node2_info):
+        raise RuntimeError("One or both nodes do not exist.")
+
+    properties_string = ', '.join([f"r.{k} = ${k}" for k in new_properties])
+    query = (
+        f"MATCH (a:{':'.join(node1_info['labels'])} {{{node1_info['key_property']}: $node1_value}})-"
+        f"[r:{relationship_type}]->"
+        f"(b:{':'.join(node2_info['labels'])} {{{node2_info['key_property']}: $node2_value}}) "
+        f"SET {properties_string} "
+        f"RETURN type(r)"
+    )
+    params = {
+        'node1_value': node1_info['key_value'],
+        'node2_value': node2_info['key_value'],
+        **new_properties
+    }
+    result = session.run(query, **params)
+    if result.single():
+        return f"SUCCESS: Relationship {relationship_type} updated between {node1_info['key_value']} and {node2_info['key_value']}."
+    else:
+        raise RuntimeError("Failed to update relationship.")
+
 
 def get_node_info(session, label, key_property, key_value):
     query = f"MATCH (n:{label}) WHERE n.{key_property} = $key_value RETURN labels(n) AS labels, properties(n) AS properties"
