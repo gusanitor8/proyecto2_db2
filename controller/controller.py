@@ -61,13 +61,17 @@ def run(session):
                 actualizar_celular_correo(global_dpi)
 
             elif opcion_cliente == "8":
-                actualizar_titulacion(global_dpi)
+                update_info = actualizar_titulacion(global_dpi)
+                print(update_relationship (session, update_info))
 
             elif opcion_cliente == "9":
                 eliminar_usuario(global_dpi)
 
             elif opcion_cliente == "10":
-                informacion_usuario(global_dpi)
+                label, key_property, key_value = informacion_usuario(global_dpi)
+                user_info = get_node_info(session, label, key_property, key_value)
+                print_node_info(user_info)
+                
 
             elif opcion_cliente == "11":
                 ver_cuentas(global_dpi)
