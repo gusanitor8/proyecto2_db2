@@ -1,29 +1,20 @@
 from neo4j import GraphDatabase
 from pyvis.network import Network
-from dotenv import load_dotenv
+import webbrowser
 import os
 
-load_dotenv()
 
-uri = os.getenv('NEO4J_URI')
-user = os.getenv('NEO4J_USERNAME')
-password = os.getenv('NEO4J_PASSWORD')
+def display_trans_history(session, node_info):
+    def make_query(node_info_):
+        query = f"""
+        MATCH (n:Cuenta{{ {node_info_['key_property']}: {node_info_['key_value']} }} )-[r:TRANSACCION]->(m:Cuenta)
+        RETURN n, r, m
+        """
+        return query
 
-driver = GraphDatabase.driver(uri, auth=(user, password))
-
-# Sample Cypher query to retrieve nodes and relationships
-cypher_query = """
-MATCH (n)-[r]->(m)
-RETURN n, r, m
-LIMIT 100
-"""
-
-# Execute the query and fetch the results
-
-with driver.session() as session:
-    result = session.run(cypher_query)
-
-    net = Network(cdn_resources="remote", directed=True, height='500px', width='100%', notebook=True)
+    query = make_query(node_info)
+    result = session.run(query)
+    net = Network(cdn_resources="remote", directed=True, height='1000px', width='100%', notebook=True)
 
     for record in result:
         node_a = record["n"]
@@ -31,11 +22,10 @@ with driver.session() as session:
         relationship = record["r"]
 
         # add nodes
-        net.add_node(node_a.element_id, label=list(node_a.labels)[0])
-        net.add_node(node_b.element_id, label=list(node_a.labels)[0])
-        net.add_edge(node_a.element_id, node_b.element_id, title=relationship.type)
+        net.add_node(node_a.element_id, label='Cuenta: ' + str(node_a._properties['no_cuenta']))
+        net.add_node(node_b.element_id, label='Cuenta: ' + str(node_b._properties['no_cuenta']))
+        net.add_edge(node_a.element_id, node_b.element_id, title=relationship.type, label=relationship.type)
 
-# save html format
-net.show("out.html", notebook=False)
-
-driver.close()
+    net.show("out.html", notebook=False)
+    current_path = os.getcwd()
+    webbrowser.open('file://' + current_path + '/out.html')
