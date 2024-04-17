@@ -41,3 +41,14 @@ def input_date(message):
             return date
         except ValueError:
             print("Por favor, ingrese una fecha válida (YYYY-MM-DD).")
+
+def nit_or_dpi(message):
+    while True:
+        value = input(message)
+        if int(value):
+            dpi = int(value)
+            return dpi, "dpi"
+        else:
+            nit = str(value) 
+            return nit, "nit"
+        

@@ -277,32 +277,40 @@ def hacer_transferencia(session):
 
 
 # 6
-def eliminar_propiedades(global_dpi):
-    dpi = global_dpi
+def eliminar_propiedades(session):
+    value, tipo = nit_or_dpi("Ingrese el NIT o DPI del usuario al que quiere eliminar la propiedad: ")
     print("Qué desea eliminar?")
     opcion_eliminar = input("1. Celular, 2. Correo: ")
+    if tipo == "nit":
+        node_info = get_node_info("Empresa", "nit", value)
+    if tipo == "dpi":
+        node_info = get_node_info("Individuo", "dpi", value)
+    
     if opcion_eliminar == "1":
-        success_message("El número de celular ha sido eliminado exitosamente.")
-        menu_principal()  # Regresar al menú principal
+        print(remove_node_property(session, node_info, "telefono"))
     elif opcion_eliminar == "2":
-        success_message("La dirección de correo electrónico ha sido eliminada exitosamente.")
-        menu_principal()  # Regresar al menú principal
+        print(remove_node_property(session, node_info, "email"))
+    else:
+        print("Opción inválida. Por favor, ingrese un número del 1 al 2.")
 
 
 # 7
-def actualizar_celular_correo(global_dpi):
-    dpi = global_dpi
+def actualizar_celular_correo(session):
+    value, tipo = nit_or_dpi("Ingrese el NIT o DPI del usuario al que quiere actualizar la propiedad: ")
     print("Qué desea actualizar?")
     opcion_actualizar = input("1. Celular, 2. Correo: ")
+    if tipo == "nit":
+        node_info = get_node_info("Empresa", "nit", value)
+    if tipo == "dpi":
+        node_info = get_node_info("Individuo", "dpi", value)
+
     if opcion_actualizar == "1":
         nuevo_celular = input("Ingrese el nuevo número de celular: ")
-        success_message("El número de celular ha sido actualizado exitosamente.")
-        menu_principal()  # Regresar al menú principal
+        print(update_node_properties(session, node_info, "telefono", nuevo_celular))
+
     elif opcion_actualizar == "2":
         nuevo_correo = input("Ingrese la nueva dirección de correo electrónico: ")
-        success_message("La dirección de correo electrónico ha sido actualizada exitosamente.")
-        menu_principal()  # Regresar al menú principal
-
+        print(update_node_properties(session, node_info, "email", nuevo_correo))
 
 #8 PENDIENTE
 def actualizar_titulacion(global_dpi):
