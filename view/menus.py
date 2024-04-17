@@ -353,8 +353,6 @@ def eliminar_usuario(global_dpi):
 
 
 # 10
-
-# 10
 def informacion_usuario(global_dpi):
     dpi = input_int("Ingrese el DPI del usuario del que desea obtener información: ")
 
@@ -363,18 +361,6 @@ def informacion_usuario(global_dpi):
     key_value = dpi
     
     return label, key_property, key_value
-
-
-
-# 11
-    dpi = input_int("Ingrese el DPI del usuario del que desea obtener información: ")
-
-    label = 'Individuo'
-    key_property = 'dpi'
-    key_value = dpi
-    
-    return label, key_property, key_value
-    
 
 #11
 def ver_cuentas(global_dpi):
