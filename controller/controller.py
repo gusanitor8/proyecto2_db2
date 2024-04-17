@@ -48,7 +48,8 @@ def run(session):
 
 
             elif opcion_cliente == "3":
-                crear_cuenta(global_dpi)
+                info_nodo = crear_cuenta(session)
+                print(create_node(session, info_nodo))
 
             elif opcion_cliente == "4":
                 agregar_celular_correo(global_dpi)

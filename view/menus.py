@@ -1,4 +1,5 @@
 from utils.utils import *
+from controller.db_crud import *
 
 def success_message(message):
     """Muestra un mensaje de éxito junto con un mensaje adicional.
@@ -145,14 +146,14 @@ def crear_usuario_individuo():
 
 #2
 def crear_usuario_empresa():
-    nombre_empresa = inpt_null("Ingrese el nombre de la nueva empresa: ")
-    nit = inpt_null("Ingrese el NIT de la empresa: ")
+    nombre_empresa = input_null("Ingrese el nombre de la nueva empresa: ")
+    nit = input_null("Ingrese el NIT de la empresa: ")
     direccion = input("Ingrese la dirección de la nueva empresa: ")
     regimen = input("Ingrese el régimen de la empresa: ")
     sector = input("Ingrese el sector de la empresa: ")
     telefono = input("Ingrese el número de teléfono de la empresa: ")
     email = input("Ingrese el correo electrónico de la empresa: ")
-    representante = inpt_null("Ingrese el nombre del representante legal de la empresa: ")
+    representante = input_null("Ingrese el nombre del representante legal de la empresa: ")
     
     node_info = gen_node_struct(["Empresa"], 
                     {"nombre_empresa": nombre_empresa, 
@@ -173,32 +174,69 @@ def crear_usuario_empresa():
     return node_info
 
 #3
-def crear_cuenta(global_dpi):
+def crear_cuenta(session):
     print("¿Qué tipo de cuenta deseas crear?")
     print("1. Cuenta de ahorro")
     print("2. Cuenta monetaria")
     print("3. Cuenta a plazos")
 
     tipo = input("Ingrese el número de la opción que deseas: ")
+    no_cuenta = get_lates_account_number(session)
+    no_cuenta = no_cuenta + 1
+    saldo = input_float("Ingrese el saldo inicial de la cuenta: ")
+    fecha_creacion = datetime.now()
 
+    print("Seleccion la divisa de la cuenta: ")
+    divisa_opt = input_int("1[USD] o 2[GTQ]")
+    if divisa_opt == 1:
+        divisa = "USD"
+    elif divisa_opt == 2:
+        divisa = "GTQ"
+    else:
+        divisa = "GTQ"
+    
+    estado = True
+
+    
     if tipo == "1":
-        dpi = global_dpi
-        balance = input("Ingrese el balance inicial de la cuenta: ")
-        print("Creando cuenta de ahorro...")
-        success_message("La cuenta de ahorro ha sido creada exitosamente.")
-        modo_cliente()
+        type = 'Ahorro'
+        limite = input_float("Ingrese el límite de la cuenta: ")
+        interes = input_float("Ingrese el interés de la cuenta: ")
+        objetivo = input("Ingrese el objetivo de la cuenta: (puede dejarlo en blanco)")
+
     elif tipo == "2":
-        dpi = global_dpi
-        balance = input("Ingrese el balance inicial de la cuenta: ")
-        print("Creando cuenta monetaria...")
-        success_message("La cuenta monetaria ha sido creada exitosamente.")
-        modo_cliente()
+        type = 'Monetaria'
+        limite = input_float("Ingrese el límite de la cuenta: ")
+
     elif tipo == "3":
-        dpi = global_dpi
-        balance = input("Ingrese el balance inicial de la cuenta: ")
-        print("Creando cuenta a plazos...")
-        success_message("La cuenta a plazos ha sido creada exitosamente.")
-        modo_cliente()
+        type = 'Plazo'
+        interes = input_float("Ingrese el interés de la cuenta: ")
+        vencimiento = input_date("Ingrese la fecha de vencimiento de la cuenta: ")
+        capital = saldo
+        frecuencia = input_null("Ingrese la frecuencia de pago de la cuenta: ")
+
+    node_info = gen_node_struct(["Cuenta", type], 
+                    {"no_cuenta": no_cuenta, 
+                     "saldo": saldo,
+                     "fecha_apertura": fecha_creacion,
+                     "divisa": divisa,
+                     "estado": estado}, 
+                     "no_cuenta", no_cuenta)
+    if limite:
+        node_info["properties"]["limite_retiro"] = limite
+    if interes:
+        node_info["properties"]["tasa_interes"] = interes
+    if objetivo:
+        node_info["properties"]["objetivo"] = objetivo
+    if vencimiento:
+        node_info["properties"]["vencimiento"] = vencimiento
+    if capital:
+        node_info["properties"]["capital_inicial"] = capital
+    if frecuencia:
+        node_info["properties"]["frecuencia_pago"] = frecuencia
+
+    return node_info
+
 
 #4
 def agregar_celular_correo(global_dpi):

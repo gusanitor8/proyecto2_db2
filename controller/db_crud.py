@@ -13,7 +13,11 @@ Structure of node_info:
     'key_value': 'value1'            # The value of the key property to identify the node uniquely
 }
 """
-
+def get_lates_account_number(session):
+    query = "MATCH (c:Cuenta) RETURN c.no_cuenta ORDER BY c.no_cuenta DESC LIMIT 1"
+    result = session.run(query)
+    record = result.single()
+    return record['c.no_cuenta']
 
 def find_node(session, node_info):
     """
