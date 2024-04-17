@@ -1,4 +1,4 @@
-from views import menu_principal, modo_administrador, desactivar_cuenta, clasificar_cuentas_fraudulentas, marcar_cuenta_fraudulenta, marcar_cuentas_fraudulentas, borrar_propiedad_fraude, modo_cliente, crear_usuario_individuo, crear_usuario_empresa, crear_cuenta, agregar_celular_correo, hacer_transferencia, eliminar_propiedades, actualizar_celular_correo, actualizar_titulacion, eliminar_usuario, informacion_usuario, ver_cuentas, informacion_cuenta
+from menus import menu_principal, modo_administrador, desactivar_cuenta, clasificar_cuentas_fraudulentas, marcar_cuenta_fraudulenta, marcar_cuentas_fraudulentas, borrar_propiedad_fraude, modo_cliente, crear_usuario_individuo, crear_usuario_empresa, crear_cuenta, agregar_celular_correo, hacer_transferencia, eliminar_propiedades, actualizar_celular_correo, actualizar_titulacion, eliminar_usuario, informacion_usuario, ver_cuentas, informacion_cuenta
 
 global_dpi = ""
 
