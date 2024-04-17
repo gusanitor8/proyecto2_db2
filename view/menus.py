@@ -312,38 +312,19 @@ def actualizar_celular_correo(session):
         nuevo_correo = input("Ingrese la nueva dirección de correo electrónico: ")
         print(update_node_properties(session, node_info, "email", nuevo_correo))
 
-#8 PENDIENTE
-def actualizar_titulacion(global_dpi):
-    dpi = input_int("Ingrese el DPI del usuario al que quiere cambiar la titulacion: ")
-    nit = input_null("Ingrese el NIT de la empresa a la que quiere agregar la titularidad: ")
+#8
+def actualizar_titulacion(session):
+    value, tipo = nit_or_dpi("Ingrese el NIT o DPI del usuario al que quiere actualizar la titulación: ")
+    no_cuenta = input_int("Ingrese el No. de Cuenta de la titulación que desea actualizar: ")
+    if tipo == "nit":
+        node_info = get_node_info("Empresa", "nit", value)
+    if tipo == "dpi":
+        node_info = get_node_info("Individuo", "dpi", value)
 
-    node_info1 = {
-        'labels': ["Individuo"],
-        'properties': {
-        "dpi": dpi
-        },
-        'key_property': "dpi",
-        'key_value': dpi
-    }
+    cuenta_info = get_node_info(session, "Cuenta", "no_cuenta", no_cuenta)
+    rol = input_null("Ingrese el nuevo rol del titular: ")
 
-    node_info2 = {
-        'labels': ["Empresa"],
-        'properties': {
-        "nit": nit
-        },
-        'key_property': "nit",
-        'key_value': nit
-    }
-
-    relationship_type = 'TITULAR'
-
-    property_value = input("Ingrese el nuevo valor para la propiedad de la relación (true or false): ")
-
-    new_properties = {
-        'estado': property_value
-    }
-
-    return node_info1, node_info2, relationship_type, new_properties
+    print(update_relationship(session, node_info, cuenta_info, "TITULAR", {"rol": rol}))
 
 
 # 9
