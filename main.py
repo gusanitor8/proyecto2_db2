@@ -13,6 +13,11 @@ try:
         print('INFO: Associated accounts retrieved successfully')
         for cuenta in cuentas:
             print_node_info(cuenta)
+            print('Transacciones salientes:')
+            transaction_history(session, cuenta['properties']['no_cuenta'])
+            print('Transacciones entrantes:')
+            incoming_transaction_history(session, cuenta['properties']['no_cuenta'])
+            
         
 
 except Exception as e:

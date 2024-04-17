@@ -145,3 +145,72 @@ def find_associated_accounts(session, node_label, key_property, key_value):
         accounts.append(account_info)
 
     return accounts
+
+
+def print_transaction_info(transaction):
+    print(f"Codigo: {transaction.id}")
+    for key, value in transaction.items():
+        if isinstance(value, str) and '\n' in value:
+            value = value.replace('\n', ', ')
+        print(f"  - {key}: {value}")
+    print()
+
+
+def transaction_history(session, account_number):
+    skip = 0
+    limit = 3  # Define el límite de transacciones por página
+
+    while True:
+        query = """
+        MATCH (c:Cuenta {no_cuenta: $account_number})-[r:TRANSACCION]->(c2:Cuenta)
+        RETURN r, c2.no_cuenta AS cuenta_destino ORDER BY r.fecha DESC SKIP $skip LIMIT $limit
+        """
+        results = session.run(query, account_number=account_number, skip=skip, limit=limit)
+        transactions = list(results)
+
+        if not transactions:
+            print("Ha visto todas las transacciones de su cuenta." if skip != 0 else "No hay transacciones disponibles para esta cuenta.")
+            break
+
+        for record in transactions:
+            print(f"Transacción a la cuenta: {record['cuenta_destino']}")
+            print_transaction_info(record['r'])
+
+        if len(transactions) < limit:
+            print("Ha visto todas las transacciones de su cuenta.\n")
+            break
+
+        if input("Desea ver más transacciones? (s/n): ").lower() != 's':
+            break
+        skip += limit
+
+
+
+def incoming_transaction_history(session, account_number):
+    skip = 0
+    limit = 3  # Define el límite de transacciones por página
+
+    while True:
+        query = """
+        MATCH (c1:Cuenta)-[r:TRANSACCION]->(c:Cuenta {no_cuenta: $account_number})
+        RETURN r, c1.no_cuenta AS cuenta_origen ORDER BY r.fecha DESC SKIP $skip LIMIT $limit
+        """
+        results = session.run(query, account_number=account_number, skip=skip, limit=limit)
+        transactions = list(results)
+
+        if not transactions:
+            print("Ha visto todas las transacciones entrantes de su cuenta." if skip != 0 else "No hay transacciones entrantes disponibles para esta cuenta.")
+            break
+
+        for record in transactions:
+            print(f"Transacción desde la cuenta: {record['cuenta_origen']}")
+            print_transaction_info(record['r'])
+
+        if len(transactions) < limit:
+            print("Ha visto todas las transacciones entrantes de su cuenta.\n")
+            break
+
+        if input("Desea ver más transacciones entrantes? (s/n): ").lower() != 's':
+            break
+        skip += limit
+
