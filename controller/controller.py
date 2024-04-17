@@ -71,7 +71,7 @@ def run(session):
                 agregar_celular_correo(global_dpi, session)
 
             elif opcion_cliente == "5":
-                hacer_transferencia(global_dpi)
+                hacer_transferencia(session)
 
             elif opcion_cliente == "6":
                 eliminar_propiedades(global_dpi)

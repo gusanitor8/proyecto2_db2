@@ -261,14 +261,17 @@ def agregar_celular_correo(global_dpi, session):
 
 
 # 5
-def hacer_transferencia(global_dpi):
-    dpi = global_dpi
+def hacer_transferencia(session):
+    value = input("Ingrese el DPI o NIT de su usuario al que quiere transferir: ")
     print("Estas son sus cuentas:")
-    cuenta_origen = input("Ingrese el No. de Cuenta desde la que desea realizar la transferencia: ")
-    cuenta_destino = input("Ingrese el No. de Cuenta a la que desea transferir: ")
-    monto = input("Ingrese el monto a transferir: ")
-    success_message("La transferencia se ha realizado exitosamente.")
-    menu_principal()  # Regresar al menú principal
+    if int(value):
+        dpi = value
+        find_associated_accounts(session, "dpi", dpi)
+    else:
+        nit = str(value)
+        find_associated_accounts(session, "nit", nit)
+
+    handle_transaction(session)
 
 
 # 6
