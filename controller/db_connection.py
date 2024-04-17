@@ -20,13 +20,13 @@ def load_credentials(filepath='.env'):
     """
     load_status = dotenv.load_dotenv(filepath)
     if not load_status:
-        raise RuntimeError('ERROR: Failed to load credentials from .env file')
+        raise RuntimeError('Failed to load credentials from .env file')
 
     URI = os.getenv('NEO4J_URI')
     AUTH = (os.getenv('NEO4J_USERNAME'), os.getenv('NEO4J_PASSWORD'))
 
     if not URI or not AUTH:
-        raise RuntimeError('ERROR: Missing credentials in .env file')
+        raise RuntimeError('Missing credentials in .env file')
     
     return URI, AUTH
 
@@ -53,7 +53,7 @@ def init_driver():
             neo4j_driver.verify_connectivity()
             print('INFO: Successfully connected to Neo4j database')
         except Exception as e:
-            raise RuntimeError(f'ERROR: Failed to connect to Neo4j database: {e}')
+            raise RuntimeError(f'Failed to connect to Neo4j database: {e}')
 
     return neo4j_driver
 
@@ -86,20 +86,3 @@ def close_driver():
         neo4j_driver.close()
         print('INFO: Neo4j driver closed')
         neo4j_driver = None
-
-
-# MODO DE USO
-# try:
-#         # Initialize and get the driver
-#         driver = get_driver()
-#
-#         # Perform database operations here
-#         with driver.session() as session:
-#             result = session.run('MATCH (n) RETURN count(n) AS count')
-#
-#     except Exception as e:
-#         print(f"An error occurred: {e}")
-#
-#     finally:
-#         # Ensure the driver is closed properly
-#         close_driver()
