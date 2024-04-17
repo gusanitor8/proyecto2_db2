@@ -108,12 +108,14 @@ def process_csv_relationships(csv_filepath, session):
     required_columns = [
        'dpi_titular', 'nit_titular', 'no_cuenta_titular', 'fecha_inicio_titular', 
        'rol_titular', 'estado_titular', 'cuenta_origen_tran', 'cuenta_destino_tran', 
-       'fecha_tran', 'descripcion_tran', 'ubicacion_tran', 'tipo_tran', 'alerta_tran'
+       'fecha_tran', 'descripcion_tran', 'ubicacion_tran', 'tipo_tran', 'alerta_tran', 
+       'monto_tran'
     ]
 
     # Validate the format of the CSV file
-    if not all(column in df.columns for column in required_columns):
-        raise ValueError("CSV format not valid: missing required columns")
+    if not set(required_columns).issubset(df.columns):
+        missing_columns = set(required_columns) - set(df.columns)
+        raise ValueError(f"CSV format not valid: missing required columns {missing_columns}")
     
     # Loop through the rows of the DataFrame
     for index, row in df.iterrows():
@@ -185,6 +187,8 @@ def process_csv_relationships(csv_filepath, session):
                 relationship_properties['tipo'] = row['tipo_tran']
             if pd.notna(row['alerta_trans']):
                 relationship_properties['alerta'] = row['alerta_tran']
+            if pd.notna(row['monto_tran']):
+                relationship_properties['monto'] = row['monto_tran']
 
             # create relationship if node information is available
             if node1_info and node2_info:
