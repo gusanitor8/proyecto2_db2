@@ -145,11 +145,32 @@ def crear_usuario_individuo():
 
 #2
 def crear_usuario_empresa():
-    nit = input("Ingrese el NIT de la empresa: ")
-    nombre_empresa = input("Ingrese el nombre de la nueva empresa: ")
-    direccion_empresa = input("Ingrese la dirección de la nueva empresa: ")
-    success_message("La empresa ha sido creada exitosamente.")
-    menu_principal()  # Regresar al menú principal
+    nombre_empresa = inpt_null("Ingrese el nombre de la nueva empresa: ")
+    nit = inpt_null("Ingrese el NIT de la empresa: ")
+    direccion = input("Ingrese la dirección de la nueva empresa: ")
+    regimen = input("Ingrese el régimen de la empresa: ")
+    sector = input("Ingrese el sector de la empresa: ")
+    telefono = input("Ingrese el número de teléfono de la empresa: ")
+    email = input("Ingrese el correo electrónico de la empresa: ")
+    representante = inpt_null("Ingrese el nombre del representante legal de la empresa: ")
+    
+    node_info = gen_node_struct(["Empresa"], 
+                    {"nombre_empresa": nombre_empresa, 
+                     "nit": nit,
+                      "representate_legal": representante}, 
+                     "nit", nit)
+    if direccion:
+        node_info["properties"]["direccion"] = direccion
+    if regimen:
+        node_info["properties"]["regimen"] = regimen
+    if sector:
+        node_info["properties"]["sector"] = sector
+    if telefono:
+        node_info["properties"]["telefono"] = telefono
+    if email:
+        node_info["properties"]["email"] = email
+    
+    return node_info
 
 #3
 def crear_cuenta(global_dpi):

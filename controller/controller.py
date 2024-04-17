@@ -43,7 +43,9 @@ def run(session):
                 print(create_node(session, informacion_nodo))
 
             elif opcion_cliente == "2":
-                crear_usuario_empresa()
+                info_nodo = crear_usuario_empresa()
+                print(create_node(session, info_nodo))
+
 
             elif opcion_cliente == "3":
                 crear_cuenta(global_dpi)
