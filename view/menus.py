@@ -280,10 +280,10 @@ def hacer_transferencia(session):
     print("Estas son sus cuentas:")
     if int(value):
         dpi = value
-        find_associated_accounts(session, "dpi", dpi)
+        find_associated_accounts(session, "Cuenta","dpi", dpi)
     else:
         nit = str(value)
-        find_associated_accounts(session, "nit", nit)
+        find_associated_accounts(session, "Cuenta", "nit", nit)
 
     handle_transaction(session)
 
