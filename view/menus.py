@@ -184,6 +184,13 @@ def crear_usuario_empresa():
 
 #3
 def crear_cuenta(session):
+    interes = ""
+    limite=""
+    objetivo=""
+    vencimiento=""
+    capital=""
+    frecuencia=""
+    
     print("¿Qué tipo de cuenta deseas crear?")
     print("1. Cuenta de ahorro")
     print("2. Cuenta monetaria")
