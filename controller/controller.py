@@ -73,10 +73,7 @@ def run(session):
 
             elif opcion_cliente == "3":
                 info_nodo = crear_cuenta(session)
-                no_cuenta = input_int("Ingrese el número de cuenta: ")
-                info_cuenta = get_node_info(session, "CUENTA", "no_cuenta", no_cuenta)
                 print(create_node(session, info_nodo))
-                create_relationship(session, info_nodo, info_cuenta, "TITULAR")
 
             elif opcion_cliente == "4":
                 agregar_celular_correo(global_dpi, session)
