@@ -1,5 +1,6 @@
 from datetime import datetime
-from utils.utils import*
+from utils.utils import *
+
 """
 Structure of node_info:
 {

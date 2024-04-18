@@ -1,7 +1,6 @@
 import pandas as pd
 from controller.db_crud import *
 
-
 def process_csv_nodes(csv_filepath, session):
     """
     Process a CSV file containing node data and create nodes in the database.
