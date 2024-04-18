@@ -190,7 +190,7 @@ def crear_cuenta(session):
     vencimiento=""
     capital=""
     frecuencia=""
-    
+
     print("¿Qué tipo de cuenta deseas crear?")
     print("1. Cuenta de ahorro")
     print("2. Cuenta monetaria")
@@ -252,6 +252,7 @@ def crear_cuenta(session):
         node_info["properties"]["frecuencia_pago"] = frecuencia
 
     return node_info
+
 
 
 #4
